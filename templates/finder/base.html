@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html>
+    <title>
+    {% block title_block %}
+        Free Food Finder
+    {% endblock %}
+    </title>
+
+<body>
+
+<header>
+    <li><About</li>
+    <li>Login In</li>
+</header>
+
+<div>
+{% block body_block %}
+{% endblock %}
+</div>
+</body>
+</html>
