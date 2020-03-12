@@ -39,13 +39,15 @@ def populate():
 
     #initialise the owners
     for owner_data in owners:
-        u = User.objects.get_or_create(username= owner_data['username'], first_name= owner_data['first_name'], last_name=owner_data['last_name'], password=owner_data['password'])[0]
+        u = User.objects.get_or_create(username= owner_data['username'], first_name= owner_data['first_name'], last_name=owner_data['last_name'])[0]
+        u.set_password(owner_data['password'])
+        u.save()
         c = OwnerAccount.objects.get_or_create(user=u)[0]
         c.save()
 
     businesses = [
     {
-    'owner': OwnerAccount.objects.get(user=User.objects.get(username="trevi_italian@gmail.com"))[0],
+    'owner': OwnerAccount.objects.get(user=User.objects.get(username="trevi_italian@gmail.com")),
     'name': "Trevi Italian Cuisine",
      'address': "92 George Street, Glasgow, G1 1AB",
      'description': "An unique Italian restaurant which has recently decided to reduce waste and donate leftover food to people in need instead",
@@ -55,7 +57,7 @@ def populate():
     'picture': "businesses/trevi-italian.jpg"
     },
     {
-    'owner': OwnerAccount.objects.get(user=User.objects.get(username="flora.smith@outlook.com"))[0],
+    'owner': OwnerAccount.objects.get(user=User.objects.get(username="flora.smith@outlook.com")),
     'name': "West End Bakery",
     'address': "141 Byres Road, Glasgow, G12 8TT",
     'description': "This family-run bakery close to the University of Glasgow sells fresh bread and pastries throughout the day.",
@@ -65,7 +67,7 @@ def populate():
     'picture': "businesses/west-end-bakery.jpeg"
     },
     {
-    'owner': OwnerAccount.objects.get(user=User.objects.get(username="flora.smith@outlook.com"))[0],
+    'owner': OwnerAccount.objects.get(user=User.objects.get(username="flora.smith@outlook.com")),
     'name': "Botanic Bakery",
      'address': "32 Clouston Street, Glasgow, G20 8QU",
      'description': "We specialise in organic break using traditional methods and ingredients. Help us reduce waste by reserving now!",
@@ -75,7 +77,7 @@ def populate():
      'picture': "businesses/botanic-bakery.jpeg"
      },
     {
-    'owner': OwnerAccount.objects.get(user=User.objects.get(username="alberta.stevenson@googlemail.com"))[0],
+    'owner': OwnerAccount.objects.get(user=User.objects.get(username="alberta.stevenson@googlemail.com")),
     'name': "Woodlands Vegan Café",
      'address': "141 Byres Road, Glasgow, G12 8TT",
      'description': "We sell vegan cakes and sandwiches to suit all tastes, and would like to reduce waste by donating leftovers. Order now to reserve a FREE meal!",
@@ -85,7 +87,7 @@ def populate():
      'picture': "businesses/woodlands-vegan.jpeg"
      },
     {
-    'owner' : OwnerAccount.objects.get(user=User.objects.get(username="jonanthan.harding@gmail.com"))[0],
+    'owner' : OwnerAccount.objects.get(user=User.objects.get(username="jonanthan.harding@gmail.com")),
     'name': "Bath Street Burgers",
      'address': "212 Bath Street, Glasgow, G2 4HZ",
      'description': "An award-winning burger restaurant with something for everyone. Free leftover food every day!",
@@ -119,7 +121,7 @@ def populate():
     users = [{
             'username': "jack.frost@outlook.org",
             'password': "1234password",
-            'reservation' : Offer.objects.get(business = businesses.get(businessName = "Woodlands Vegan Café"))[0]
+            'reservation' : Offer.objects.get(business = Business.objects.get(businessName = "Bath Street Burgers"))
         },
         {
             'username': "jude.quinn@gmail.com",
@@ -128,9 +130,8 @@ def populate():
         {
             'username' : "mary.louise@gmail.com",
             'password': "432password",
-            'reservation': Offer.objects.get(business=businesses.get(businessName="Bath Street Burgers"))[0]
-
-    },
+            'reservation': Offer.objects.get(business =  Business.objects.get(businessName = "West End Bakery"))
+        },
         {
             'username': "don.lewis@gmx.de",
             'password': "password987"
@@ -142,8 +143,10 @@ def populate():
         ]
 
     for user_data in users:
-        u = User.objects.get_or_create(username= user_data['username'], password=owner_data['password'])[0]
-        if ('reservation'):
+        u = User.objects.get_or_create(username= user_data['username'])[0]
+        u.set_password(user_data['password'])
+        u.save()
+        if user_data.get('reservation', False):
             c = UserAccount.objects.get_or_create(user=u, reservation = user_data['reservation'])[0]
         else:
             c = UserAccount.objects.get_or_create(user=u)[0]
