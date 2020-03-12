@@ -2,17 +2,21 @@
 {% load staticfiles %}
 
 <html>
+<head>
     <title>
     {% block title_block %}
         Free Food Finder
     {% endblock %}
     </title>
-
+</head>
 <body>
 
+<!-- header and footer to be styled properly later-->
 <header>
-    <li><About</li>
+    <ul>
+        <li><a href="{% url 'finder:about' %}">About</a></li>
     <li>Login In</li>
+    </ul>
 </header>
 
 <div>
@@ -20,4 +24,11 @@
 {% endblock %}
 </div>
 </body>
+
+<footer>
+    <ul>
+    <li>become a partner</li>
+    <li><a href="{% url 'finder:contact' %}">Contact us</a></li>
+    </ul>
+</footer>
 </html>
