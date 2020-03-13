@@ -17,13 +17,21 @@ def read_google_key():
     return google_api_key
 
 
-def calculate_distance(location1, location2):
+def get_coords(address):
+    try:
+        gmaps = googlemaps.Client(key=read_google_key())
+        coords = gmaps.geocode(address)[0]['geometry']['location']
+        lat = coords['lat']
+        long = coords['lng']
+        return lat, long
+    except:
+        raise Exception("invalid input")
+
+#calculates the distance between a set of coordinates (the coordinates of the business, stored in the database) and
+#another location
+def calculate_distance(location1_lat, location1_long, location2):
     gmaps = googlemaps.Client(key=read_google_key())
     try:
-        location1_coords = gmaps.geocode(location1)[0]['geometry']['location']
-        location1_lat = location1_coords['lat']
-        location1_long = location1_coords['lng']
-
         location2_coords = gmaps.geocode(location2)[0]['geometry']['location']
         location2_lat = location2_coords['lat']
         location2_long = location2_coords['lng']
