@@ -11,7 +11,6 @@ def about(request):
 def contact(request):
     return render(request, 'finder/contact.html')
 
-
 def home(request):
     close_businesses = []
     invalid = False
@@ -36,3 +35,9 @@ def home(request):
             featured_offers.append(o)
             print(featured_offers)
     return render(request, 'finder/home.html', {'business_list': close_businesses, 'invalid': invalid, 'featured_offers': featured_offers})
+  
+def signUp(request):
+    return render(request, 'finder/signUp.html')
+
+def login(request):
+    return render(request, 'finder/login.html')

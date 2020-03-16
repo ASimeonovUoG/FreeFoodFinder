@@ -13,10 +13,12 @@
 
 <!-- header and footer to be styled properly later-->
 <header>
-    <ul>
-        <li><a href="{% url 'finder:about' %}">About</a></li>
-    <li>Login In</li>
-    </ul>
+    <div class="topnav">
+        <a href="{% url 'finder:about' %}">About</a>
+        <a href="{% url 'finder:contact' %}">Contact</a>
+        <a href="{% url 'finder:sign-up' %}">Sign Up</a>
+        <a href="{% url 'finder:login' %}">Log In</a>
+      </div>
 </header>
 
 <div>
