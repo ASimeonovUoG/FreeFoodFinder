@@ -1,15 +1,16 @@
 from django.db import models
 from django.template.defaultfilters import slugify
-from django.contrib.auth.models import User
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
+from django.conf import settings
 
 # the User model has five attributes: username, password, email, first name, last name
 class OwnerAccount(models.Model):
     # link the OwnerAccount to a User model instance
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.user.username
+        return self.user.email
 
 
 class Business(models.Model):
@@ -49,10 +50,10 @@ class Offer(models.Model):
 
 
 class UserAccount(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     # a foreign key so that it is possible to trace with which business the user made a reservation
     reservation = models.ForeignKey(Offer, blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return self.user.username
+        return self.user.email

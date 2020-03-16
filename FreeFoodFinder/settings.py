@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'finder',
+    'cuser',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,7 @@ REGISTRATION_AUTO_LOGIN = True
 
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL= '/media/'
+
+
+# Use CustomerUser model
+AUTH_USER_MODEL = 'cuser.CUser'
