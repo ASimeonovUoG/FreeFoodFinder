@@ -21,5 +21,5 @@ from finder import views
 urlpatterns = [
     path('finder/', include('finder.urls')),
     path('admin/', admin.site.urls),
-
+    path('', views.home),
 ]
