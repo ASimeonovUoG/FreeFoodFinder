@@ -92,3 +92,20 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect(reverse('finder:home'))
+
+
+def support(request):
+	return render(request, 'finder/support.html')
+	
+def myBusinesses(request):
+	return render(request, 'finder/myBusinesses.html')
+	
+def account(request):
+	return render(request, 'finder/account.html')
+
+
+def adminPanel(request):		
+	return render(request, 'finder/adminPanel.html')
+
+def settings(request):
+	return render(request, 'finder/settings.html')
