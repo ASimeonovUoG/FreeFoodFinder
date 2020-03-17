@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponse
+from django.urls import reverse
 from finder.models import Business, Offer
 from finder.distance import calculate_distance
-from finder.forms import UserForm, UserAccountForm
+from finder.forms import UserForm, UserAccountForm, UserLoginForm
 
 # Create your views here.
 
@@ -65,5 +68,27 @@ def signUp(request):
 
     return render(request, 'finder/signUp.html', context_dict)
 
-def login(request):
-    return render(request, 'finder/login.html')
+def user_login(request):
+
+    if request.method == "POST":
+        username = request.POST.get('email')
+        password = request.POST.get('password')
+
+        user = authenticate(username=username, password=password)
+        print(user)
+        if user:
+            if user.is_active:
+                login(request, user)
+                return redirect(reverse('finder:home'))
+            else:
+                return HttpResponse("Your account is disabled")
+        else:
+            return HttpResponse("Your credentials are invalid")
+    else:
+        login_form = UserLoginForm()
+        context_dict =  {'login_form':login_form}
+        return render(request, 'finder/user_login.html',context_dict)
+
+def user_logout(request):
+    logout(request)
+    return redirect(reverse('finder:home'))

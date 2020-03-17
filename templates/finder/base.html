@@ -17,11 +17,20 @@
         <a href="{% url 'finder:about' %}">About</a>
         <a href="{% url 'finder:contact' %}">Contact</a>
         <a href="{% url 'finder:sign-up' %}">Sign Up</a>
-        <a href="{% url 'finder:login' %}">Log In</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'finder:user_logout' %}">Log Out</a>
+        {% else %}
+        <a href="{% url 'finder:user_login' %}">Log In</a>
+        {% endif %}
       </div>
 </header>
 
 <div>
+    <div id="message-Div">
+        {% if session %}
+          <p>{{session}}</p>
+          {% endif %}
+    </div>
 {% block body_block %}
 {% endblock %}
 </div>
