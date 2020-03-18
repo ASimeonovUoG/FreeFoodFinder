@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html>
+<head>
+    <title>
+    {% block title_block %}
+        Free Food Finder
+    {% endblock %}
+    </title>
+</head>
+<body>
+
+<!-- header and footer to be styled properly later-->
+<header>
+    <div class="topnav">
+        <a href="{% url 'finder:about' %}">About</a>
+        <a href="{% url 'finder:contact' %}">Contact</a>
+        <a href="{% url 'finder:sign-up' %}">Sign Up</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'finder:user_logout' %}">Log Out</a>
+        {% else %}
+        <a href="{% url 'finder:user_login' %}">Log In</a>
+        {% endif %}
+      </div>
+</header>
+
+<div>
+    <div id="message-Div">
+        {% if session %}
+          <p>{{session}}</p>
+          {% endif %}
+    </div>
+{% block body_block %}
+{% endblock %}
+</div>
+</body>
+
+<footer>
+    <ul>
+    <li>become a partner</li>
+    <li><a href="{% url 'finder:contact' %}">Contact us</a></li>
+    </ul>
+</footer>
+</html>

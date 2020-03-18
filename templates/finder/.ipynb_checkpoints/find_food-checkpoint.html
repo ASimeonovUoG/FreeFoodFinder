@@ -1,0 +1,20 @@
+{% extends 'finder/base.html' %}
+{% load staticfiles %}
+
+<link type = "text/css" rel="stylesheet" href="{% static 'css/myStyle.css' %}">
+
+{% block title_block %}
+Find Food
+{% endblock %}
+
+<ul>
+{% if business %}
+    {% for b in businesses %}
+        <h2 style = "text-align: center;"> 
+        
+    {% endfor %}
+{% else %}
+    <li><strong>There are no businesses to display.</strong></li>
+{% endif %}
+</ul>
+
