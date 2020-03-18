@@ -46,6 +46,9 @@ def signUp(request):
     if request.method == "POST":
         user_form = UserForm(request.POST)
         account_form = UserAccountForm(request.POST)
+        print(user_form)
+        print(account_form)
+        '''
         if user_form.is_valid() and account_form.is_valid():
             user = user_form.save()
 
@@ -60,6 +63,7 @@ def signUp(request):
             registered = True
         else:
             print(user_form.errors, account_form.errors)
+        '''
     else:
         user_form = UserForm()
         account_form = UserAccountForm()
@@ -75,7 +79,8 @@ def user_login(request):
         password = request.POST.get('password')
 
         user = authenticate(username=username, password=password)
-        print(user)
+        #print(user)
+        # If user is an owner or a mortal - we have different 
         if user:
             if user.is_active:
                 login(request, user)
