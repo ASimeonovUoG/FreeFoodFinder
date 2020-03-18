@@ -89,21 +89,21 @@ def user_login(request):
         context_dict =  {'login_form':login_form}
         return render(request, 'finder/user_login.html',context_dict)
     
-def show_business(request):
+def show_business(request, business_name_slug):
     
-    context = {}
+    context_dicts = {}
     
     try:
-        business = Business.objects.get(business_name_slug)
+        business = Business.objects.get(slug = business_name_slug)
+        
         
         context_dict['Business'] = business
         
     except Business.DoesNotExist:
         
-        context_dict['category'] = None
-        context_dict['pages'] = None
+        context_dict['Business'] = None
         
-    return render(request, 'finder/find_food.html', context=context_dict)
+    return render(request, 'finder/find_food.html', context_dict)
     
     
 def user_logout(request):
