@@ -13,8 +13,10 @@ $(document).ready(function() {
         //console.log(validBus);
         //console.log(validMor);
         if(validBus){
+            $("#user_form_business #id_isOwner")[0].value = "True";
             $("#user_form_business").submit();
         } else if(validMor){
+            $("#user_form_client #id_isOwner")[0].value = "False";
             $("#user_form_client").submit();
         } else {
             alert("Please enter a valid input.");

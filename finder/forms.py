@@ -6,6 +6,7 @@ User = get_user_model()
 class UserForm(forms.ModelForm):
     email = forms.CharField(widget=forms.EmailInput())
     password = forms.CharField(widget=forms.PasswordInput())
+    isOwner = forms.BooleanField(widget=forms.HiddenInput(), initial="False", required=False)
 
     class Meta:
         model = User

@@ -19,14 +19,12 @@ Sign Up
         <form id="user_form_business" method="post" action="{% url 'finder:sign-up' %}" enctype="multipart/form-data">
             {% csrf_token %}
             {{ user_form.as_p }}
-            {{ profile_form.as_p }}
         </form>
 
         <h3> Client Sign Up </h3>
         <form id="user_form_client" method="post" action="{% url 'finder:sign-up' %}" enctype="multipart/form-data">
             {% csrf_token %}
             {{ user_form.as_p }}
-            {{ profile_form.as_p }}
         </form>
 
         <button onclick="myFunction()">Click me</button> 

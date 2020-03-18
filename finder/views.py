@@ -46,12 +46,35 @@ def signUp(request):
     if request.method == "POST":
         user_form = UserForm(request.POST)
         account_form = UserAccountForm(request.POST)
-        print(user_form)
-        print(account_form)
-        '''
-        if user_form.is_valid() and account_form.is_valid():
-            user = user_form.save()
 
+        print(user_form)
+        print("_______________________")
+        print(account_form)
+
+        
+        if user_form.is_valid():
+            user = user_form.save()
+            # Branching logic as to if we want to create an Owner
+            # or a Mortal user.
+            if request.POST.get("isOwner") == "True":
+                print("User is owner")
+                user.set_password(user.password)
+                user.save()
+
+                    
+                owner = owner_form.save(commit=False)
+                owner.user = user
+                print()
+            else:
+                print("User is mortal")
+
+                account = account_form.save(commit=False)
+                account.user = user
+
+                account.save()
+
+                registered = True
+            '''
             user.set_password(user.password)
             user.save()
 
@@ -61,10 +84,11 @@ def signUp(request):
             account.save()
 
             registered = True
+            '''
         else:
             print(user_form.errors, account_form.errors)
-        '''
     else:
+        print("Ooops form invalid ??")
         user_form = UserForm()
         account_form = UserAccountForm()
 
