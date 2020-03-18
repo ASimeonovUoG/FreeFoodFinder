@@ -10,7 +10,15 @@ Find Food
 <ul>
 {% if business %}
     {% for b in businesses %}
-        <h2 style = "text-align: center;"> 
+        <li>
+            <a href="{% url 'finder:show_business' b.slug %}">
+                        {{ b.businessName }}
+                        {{ b.offersUntil }}
+                        {{ b.address }}
+                        {{ b.picture }}
+                        {{ b.tags }}
+            </a>
+        
         
     {% endfor %}
 {% else %}

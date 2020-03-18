@@ -16,5 +16,5 @@ urlpatterns = [
 	path("myBusinesses/", views.myBusinesses, name="myBusinesses"),
     path("adminPanel/", views.adminPanel, name="adminPanel"),
     path("find_food/", views.show_business, name="find_food"),
-    path('business/<slug:business_businessName_slug>/', views.show_business, name='individual_business'),
+    path('find_food/<slug:business_name_slug>/', views.show_business, name='show_business'),
 ]
