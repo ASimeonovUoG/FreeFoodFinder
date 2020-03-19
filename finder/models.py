@@ -1,7 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
-
+from finder import distance
 
 # the User model has five attributes: username, password, email, first name, last name
 class OwnerAccount(models.Model):
@@ -25,11 +25,17 @@ class Business(models.Model):
     tags = models.CharField(max_length=256)
 
     picture = models.ImageField(upload_to='businesses', blank=True)
-
     slug=models.SlugField(unique=True)
+
+    lat = models.FloatField()
+    long = models.FloatField()
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.businessName)
+        #the get_coords function returns a tuple with latitude and longitude
+        coords = distance.get_coords(self.address)
+        self.lat = coords[0]
+        self.long = coords[1]
         super(Business, self).save(*args, **kwargs)
 
     class Meta:
