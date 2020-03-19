@@ -1,5 +1,5 @@
 from django import forms
-from finder.models import UserAccount, OwnerAccount
+from finder.models import UserAccount, OwnerAccount, Business
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -22,3 +22,9 @@ class UserLoginForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('email','password',)
+
+class Update_form(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email','password',)
+
