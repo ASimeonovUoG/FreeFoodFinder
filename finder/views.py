@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.urls import reverse
-from finder.models import Business, Offer
+from finder.models import Business, Offer, OwnerAccount
 from finder.distance import calculate_distance
 from finder.forms import UserForm, UserAccountForm, UserLoginForm
-
+from django.contrib.auth.decorators import user_passes_test
+from finder.decorators import dec_test
 # Create your views here.
 
 def about(request):
@@ -58,13 +59,14 @@ def signUp(request):
             # or a Mortal user.
             if request.POST.get("isOwner") == "True":
                 print("User is owner")
+
                 user.set_password(user.password)
                 user.save()
 
-                    
-                owner = owner_form.save(commit=False)
-                owner.user = user
-                print()
+                owner = OwnerAccount.create(user)
+                owner.save()
+
+                registered = True
             else:
                 print("User is mortal")
 
@@ -153,5 +155,6 @@ def account(request):
 def adminPanel(request):		
 	return render(request, 'finder/adminPanel.html')
 
+@user_passes_test(dec_test)
 def settings(request):
 	return render(request, 'finder/settings.html')

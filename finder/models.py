@@ -4,13 +4,20 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 from django.conf import settings
 
-# the User model has five attributes: username, password, email, first name, last name
+# the User model has five attributes: password, email, first name, last name
 class OwnerAccount(models.Model):
     # link the OwnerAccount to a User model instance
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # driversLicense/OwnerPermitID...
 
     def __str__(self):
         return self.user.email
+    
+    @classmethod
+    def create(cls, user):
+        owner = cls(user=user)
+        # do something with the book
+        return owner
 
 
 class Business(models.Model):
