@@ -1,5 +1,4 @@
 <!doctype html>
-{% load staticfiles %}
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -8,7 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link type = "text/css" rel="stylesheet" href="{% static '/css/myStyle.css' %}">
+      <link type = "text/css" rel="stylesheet" href="myStyle.css">
 
     <title>Free Food Finder</title>
   </head>
@@ -30,24 +29,12 @@
         </ul>
       </div>
     </nav>
-      
-      
-    <div id = "sidebar">
-      <ul>
-          <ul><a href = "{% url 'finder:settings' %}">Account Settings</a></ul>
-          <ul><a href = "{% url 'finder:myBusinesses' %}">My Businesses</a></ul>
-          <ul><a href = "{% url 'finder:support' %}">Support</a></ul>
-      </ul>
-  </div>
         
     <div id = "page-content">
-      <h1>Settings</h1>
-        <form method ="post">
-          {% csrf_token %}
-          {{ form.as_p }}
-          <button type="submit">Save Changes</button>  </button>
-        </form> 
-        
+      <h1>Account</h1>
+        <p>To change username and password detials visit the settings page <a href = "{% url 'finder:settings' %}"> here</a></p>
+		    <p>To update your businesses details visit myBusinesses and select the business you want to make changes to <a href = "{% url 'finder:myBusinesses' %}"> here</a></p>
+        <p>For all of your business needs you can find our contact information by seleting Support<a href = "{% url 'finder:support' %}"> here</a></p>
     </div>
       
 

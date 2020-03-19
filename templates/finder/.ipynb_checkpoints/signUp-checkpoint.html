@@ -1,0 +1,23 @@
+{% extends 'finder/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+Sign Up
+{% endblock %}
+
+{% block body_block %}
+    <div>
+        <h1 style="text-align: center;">SignUp Page Placeholder</h1>
+    </div>
+    {% if registered %}
+        <p>Thanks for registering</p>
+    {% else %}
+        <p>Register here:</p>
+        <form id="user_form" method="post" action="{% url 'finder:sign-up' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ user_form.as_p }}
+            {{ profile_form.as_p }}
+            <input type="submit" name="submit" value="Sign Up" />
+        </form>
+    {% endif %} 
+{% endblock %}

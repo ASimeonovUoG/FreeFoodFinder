@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 from finder.models import Business, Offer
 from finder.distance import calculate_distance
-from finder.forms import UserForm, UserAccountForm, UserLoginForm, Update_form
+from finder.forms import UserForm, UserAccountForm, UserLoginForm
 
 # Create your views here.
 
@@ -46,35 +46,9 @@ def signUp(request):
     if request.method == "POST":
         user_form = UserForm(request.POST)
         account_form = UserAccountForm(request.POST)
-
-        print(user_form)
-        print("_______________________")
-        print(account_form)
-
-        
-        if user_form.is_valid():
+        if user_form.is_valid() and account_form.is_valid():
             user = user_form.save()
-            # Branching logic as to if we want to create an Owner
-            # or a Mortal user.
-            if request.POST.get("isOwner") == "True":
-                print("User is owner")
-                user.set_password(user.password)
-                user.save()
 
-                    
-                owner = owner_form.save(commit=False)
-                owner.user = user
-                print()
-            else:
-                print("User is mortal")
-
-                account = account_form.save(commit=False)
-                account.user = user
-
-                account.save()
-
-                registered = True
-            '''
             user.set_password(user.password)
             user.save()
 
@@ -84,11 +58,9 @@ def signUp(request):
             account.save()
 
             registered = True
-            '''
         else:
             print(user_form.errors, account_form.errors)
     else:
-        print("Ooops form invalid ??")
         user_form = UserForm()
         account_form = UserAccountForm()
 
@@ -103,8 +75,7 @@ def user_login(request):
         password = request.POST.get('password')
 
         user = authenticate(username=username, password=password)
-        #print(user)
-        # If user is an owner or a mortal - we have different 
+        print(user)
         if user:
             if user.is_active:
                 login(request, user)
@@ -139,6 +110,7 @@ def user_logout(request):
     logout(request)
     return redirect(reverse('finder:home'))
 
+
 def support(request):
 	return render(request, 'finder/support.html')
 	
@@ -148,9 +120,9 @@ def myBusinesses(request):
 def account(request):
 	return render(request, 'finder/account.html')
 
-def adminPanel(request):
 
+def adminPanel(request):		
 	return render(request, 'finder/adminPanel.html')
 
 def settings(request):
-    return render(request, 'finder/settings.html')  
+	return render(request, 'finder/settings.html')

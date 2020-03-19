@@ -1,5 +1,6 @@
 <!doctype html>
 {% load staticfiles %}
+
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -8,7 +9,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link type = "text/css" rel="stylesheet" href="{% static '/css/myStyle.css' %}">
+    <link type = "text/css" rel="stylesheet" href="{% static 'css/myStyle.css' %}">
 
     <title>Free Food Finder</title>
   </head>
@@ -32,22 +33,39 @@
     </nav>
       
       
-    <div id = "sidebar">
-      <ul>
-          <ul><a href = "{% url 'finder:settings' %}">Account Settings</a></ul>
-          <ul><a href = "{% url 'finder:myBusinesses' %}">My Businesses</a></ul>
-          <ul><a href = "{% url 'finder:support' %}">Support</a></ul>
-      </ul>
-  </div>
+   <div id = "sidebar">
+        <ul>
+            <ul><a href = "{% url 'finder:settings' %}">Account Settings</a></ul>
+            <ul><a href = "{% url 'finder:myBusinesses' %}">My Businesses</a></ul>
+            <ul><a href = "{% url 'finder:support' %}">Support</a></ul>
+        </ul>
+    </div>
         
     <div id = "page-content">
-      <h1>Settings</h1>
-        <form method ="post">
-          {% csrf_token %}
-          {{ form.as_p }}
-          <button type="submit">Save Changes</button>  </button>
-        </form> 
-        
+        <ul class="list-unstyled">
+          <li class="media">
+            <a href = "{% url 'finder:adminPanel' %}">
+              <img src="{% static 'images/italian.jpg' %}" class="mr-3" alt="Antonio's Italian"></a>
+            <div class="media-body">
+              <h5 class="mt-0 mb-1">Antonio's</h5>
+                Restraunt 1 description
+            </div>
+          </li>
+          <li class="media my-4">
+              <img src="{% static 'images/asian.jpg' %}" class="mr-3" alt="Asian Palace"></a>
+            <div class="media-body">
+              <h5 class="mt-0 mb-1">Asian Palace</h5>
+              Restraunt 2 Description
+            </div>
+          </li>
+          <li class="media">
+              <img src="{% static 'images/cafe.jpg' %}" class="mr-3" alt="Rumble cafe"></a>
+            <div class="media-body">
+              <h5 class="mt-0 mb-1">Rumble Cafe</h5>
+              Restraunt 3 description
+            </div>
+          </li>
+    </ul>
     </div>
       
 
