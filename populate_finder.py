@@ -118,7 +118,6 @@ def populate():
 
 
 
-#mary louise, don lewis, henry arthur smith, kerry johnstone, arthur miller, henry lee
     users = [{
             'email': "jack.frost@outlook.org",
             'password': "1234password",

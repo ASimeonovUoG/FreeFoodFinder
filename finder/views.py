@@ -2,10 +2,16 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.urls import reverse
-from finder.models import Business, Offer
+from finder.models import Business, Offer, OwnerAccount
 from finder.distance import calculate_distance
+<<<<<<< HEAD
 from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm
 
+=======
+from finder.forms import UserForm, UserAccountForm, UserLoginForm
+from django.contrib.auth.decorators import user_passes_test
+from finder.decorators import dec_test
+>>>>>>> ce284ff8a8e61059c5aca46d425011868a06e1c3
 # Create your views here.
 
 def about(request):
@@ -58,13 +64,14 @@ def signUp(request):
             # or a Mortal user.
             if request.POST.get("isOwner") == "True":
                 print("User is owner")
+
                 user.set_password(user.password)
                 user.save()
 
-                    
-                owner = owner_form.save(commit=False)
-                owner.user = user
-                print()
+                owner = OwnerAccount.create(user)
+                owner.save()
+
+                registered = True
             else:
                 print("User is mortal")
 
@@ -149,33 +156,8 @@ def account(request):
 	return render(request, 'finder/account.html')
 
 def adminPanel(request):
-    if request.method == 'POST':
-        business_form = BusinessForm(request.POST)
+    return render(request, 'finder/adminPanel.html')
 
-        print(business_form)
-
-        if business_form.is_valid():
-            business = business_form.save()
-            return redirect('finder:myBusinesses')
-
-    else:
-        business_form = BusinessForm()
-
-    context_dict = {'business_form':business_form}
-    return render(request, 'finder/adminPanel.html',context_dict)
-
+@user_passes_test(dec_test)
 def settings(request):
-    if request.method == 'POST':
-        settings_form = UserForm(request.POST)
-
-        print(settings_form)
-
-        if settings_form.is_valid():
-            user = settings_form.save()
-            return redirect('finder:account')
-
-    else:
-        settings_form = UserForm()
-
-    context_dict = {'settings_form':settings_form}
-    return render(request, 'finder/settings.html',context_dict)  
+    return render(request, 'finder/settings.html')  
