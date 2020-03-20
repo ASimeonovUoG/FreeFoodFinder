@@ -3,14 +3,22 @@ from django.template.defaultfilters import slugify
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from django.conf import settings
+from finder import distance
 
-# the User model has five attributes: username, password, email, first name, last name
+# the User model has five attributes: password, email, first name, last name
 class OwnerAccount(models.Model):
     # link the OwnerAccount to a User model instance
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # driversLicense/OwnerPermitID...
 
     def __str__(self):
         return self.user.email
+    
+    @classmethod
+    def create(cls, user):
+        owner = cls(user=user)
+        # do something with the book
+        return owner
 
 
 class Business(models.Model):
@@ -20,17 +28,21 @@ class Business(models.Model):
     description = models.CharField(max_length=1024)
     workingTime = models.CharField(max_length=128)
     offersUntil = models.TimeField()
-    # it might be possible to make tags an actual list by implementing a new field type
-    # (https://docs.djangoproject.com/en/3.0/howto/custom-model-fields/).
-    # But this seems to be enough.
     tags = models.CharField(max_length=256)
 
     picture = models.ImageField(upload_to='businesses', blank=True)
 
+
+    lat = models.FloatField()
+    long = models.FloatField()
     slug=models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.businessName)
+        #the get_coords function returns a tuple with latitude and longitude
+        coords = distance.get_coords(self.address)
+        self.lat = coords[0]
+        self.long = coords[1]
         super(Business, self).save(*args, **kwargs)
 
     class Meta:

@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.urls import reverse
-from finder.models import Business, Offer
+from finder.models import Business, Offer, OwnerAccount
 from finder.distance import calculate_distance
-from finder.forms import UserForm, UserAccountForm, UserLoginForm
+from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm
+from django.contrib.auth.decorators import user_passes_test
+from finder.decorators import dec_test
 
 # Create your views here.
 
@@ -46,9 +48,36 @@ def signUp(request):
     if request.method == "POST":
         user_form = UserForm(request.POST)
         account_form = UserAccountForm(request.POST)
-        if user_form.is_valid() and account_form.is_valid():
-            user = user_form.save()
 
+        print(user_form)
+        print("_______________________")
+        print(account_form)
+
+        
+        if user_form.is_valid():
+            user = user_form.save()
+            # Branching logic as to if we want to create an Owner
+            # or a Mortal user.
+            if request.POST.get("isOwner") == "True":
+                print("User is owner")
+
+                user.set_password(user.password)
+                user.save()
+
+                owner = OwnerAccount.create(user)
+                owner.save()
+
+                registered = True
+            else:
+                print("User is mortal")
+
+                account = account_form.save(commit=False)
+                account.user = user
+
+                account.save()
+
+                registered = True
+            '''
             user.set_password(user.password)
             user.save()
 
@@ -58,9 +87,11 @@ def signUp(request):
             account.save()
 
             registered = True
+            '''
         else:
             print(user_form.errors, account_form.errors)
     else:
+        print("Ooops form invalid ??")
         user_form = UserForm()
         account_form = UserAccountForm()
 
@@ -75,7 +106,8 @@ def user_login(request):
         password = request.POST.get('password')
 
         user = authenticate(username=username, password=password)
-        print(user)
+        #print(user)
+        # If user is an owner or a mortal - we have different 
         if user:
             if user.is_active:
                 login(request, user)
@@ -118,7 +150,6 @@ def user_logout(request):
     logout(request)
     return redirect(reverse('finder:home'))
 
-
 def support(request):
 	return render(request, 'finder/support.html')
 	
@@ -128,9 +159,35 @@ def myBusinesses(request):
 def account(request):
 	return render(request, 'finder/account.html')
 
+def adminPanel(request):
+    if request.method == 'POST':
+        business_form = BusinessForm(request.POST)
 
-def adminPanel(request):		
-	return render(request, 'finder/adminPanel.html')
+        print(business_form)
 
+        if business_form.is_valid():
+            business = business_form.save()
+            return redirect('finder:myBusinesses')
+
+    else:
+        business_form = BusinessForm()
+
+    context_dict = {'business_form':business_form}
+    return render(request, 'finder/adminPanel.html',context_dict)
+
+@user_passes_test(dec_test)
 def settings(request):
-	return render(request, 'finder/settings.html')
+    if request.method == 'POST':
+        settings_form = UserForm(request.POST)
+
+        print(settings_form)
+
+        if settings_form.is_valid():
+            user = settings_form.save()
+            return redirect('finder:account')
+
+    else:
+        settings_form = UserForm()
+
+    context_dict = {'settings_form':settings_form}
+    return render(request, 'finder/settings.html',context_dict) 

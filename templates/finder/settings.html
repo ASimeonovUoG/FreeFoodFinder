@@ -8,7 +8,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link type = "text/css" rel="stylesheet" href="{% static 'css/myStyle.css' %}">
+    <link type = "text/css" rel="stylesheet" href="{% static '/css/myStyle.css' %}">
 
     <title>Free Food Finder</title>
   </head>
@@ -42,9 +42,12 @@
         
     <div id = "page-content">
       <h1>Settings</h1>
+      <p>To change your email or Password you must fill in both fields.
+        If you want to change your password only enter your existing email address.
+      </p>
         <form method ="post">
           {% csrf_token %}
-          {{ form.as_p }}
+          {{ settings_form.as_p }}
           <button type="submit">Save Changes</button>  </button>
         </form> 
         
