@@ -30,14 +30,15 @@ class Update_form(forms.ModelForm):
         model = User
         fields = ('email','password',)
 """
+
 class BusinessForm(forms.ModelForm):
-    businessName = forms.CharField()
-    address = forms.CharField()
-    description = forms.CharField()
-    workingTime = forms.CharField()
+    BusinessName = forms.CharField()
+    Address = forms.CharField()
+    Description = forms.CharField()
+    Open = forms.CharField()
     #OffersUntil = forms.
-    tags = forms.CharField()
+    Tags = forms.CharField()
 
     class Meta:
       model = Business
-      fields = ('businessName','address','description','workingTime','tags')  
+      fields = ('BusinessName','Address','Description','Open','Tags')  

@@ -149,7 +149,33 @@ def account(request):
 	return render(request, 'finder/account.html')
 
 def adminPanel(request):
-    return render(request, 'finder/adminPanel.html')
+    if request.method == 'POST':
+        business_form = BusinessForm(request.POST)
+
+        print(business_form)
+
+        if business_form.is_valid():
+            business = business_form.save()
+            return redirect('finder:myBusinesses')
+
+    else:
+        business_form = BusinessForm()
+
+    context_dict = {'business_form':business_form}
+    return render(request, 'finder/adminPanel.html',context_dict)
 
 def settings(request):
-    return render(request, 'finder/settings.html')  
+    if request.method == 'POST':
+        settings_form = UserForm(request.POST)
+
+        print(settings_form)
+
+        if settings_form.is_valid():
+            user = settings_form.save()
+            return redirect('finder:account')
+
+    else:
+        settings_form = UserForm()
+
+    context_dict = {'settings_form':settings_form}
+    return render(request, 'finder/settings.html',context_dict)  

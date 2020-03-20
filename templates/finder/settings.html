@@ -42,9 +42,12 @@
         
     <div id = "page-content">
       <h1>Settings</h1>
+      <p>To change your email or Password you must fill in both fields.
+        If you want to change your password only enter your existing email address.
+      </p>
         <form method ="post">
           {% csrf_token %}
-          {{ form.as_p }}
+          {{ settings_form.as_p }}
           <button type="submit">Save Changes</button>  </button>
         </form> 
         
