@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 from finder.models import Business, Offer
 from finder.distance import calculate_distance
-from finder.forms import UserForm, UserAccountForm, UserLoginForm, Update_form
+from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm
 
 # Create your views here.
 
@@ -149,8 +149,7 @@ def account(request):
 	return render(request, 'finder/account.html')
 
 def adminPanel(request):
-
-	return render(request, 'finder/adminPanel.html')
+    return render(request, 'finder/adminPanel.html')
 
 def settings(request):
     return render(request, 'finder/settings.html')  

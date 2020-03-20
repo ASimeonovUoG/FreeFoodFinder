@@ -24,9 +24,20 @@ class UserLoginForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('email','password',)
-
+"""
 class Update_form(forms.ModelForm):
     class Meta:
         model = User
         fields = ('email','password',)
+"""
+class BusinessForm(forms.ModelForm):
+    businessName = forms.CharField()
+    address = forms.CharField()
+    description = forms.CharField()
+    workingTime = forms.CharField()
+    #OffersUntil = forms.
+    tags = forms.CharField()
 
+    class Meta:
+      model = Business
+      fields = ('businessName','address','description','workingTime','tags')  
