@@ -3,6 +3,7 @@ from django.template.defaultfilters import slugify
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from django.conf import settings
+from finder import distance
 
 # the User model has five attributes: password, email, first name, last name
 class OwnerAccount(models.Model):
