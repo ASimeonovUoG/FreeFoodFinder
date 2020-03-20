@@ -6,3 +6,4 @@ db.sqlite3
 thumbs.db
 *.pyc
 .vscode/
+finder/migrations/0001_initial.py

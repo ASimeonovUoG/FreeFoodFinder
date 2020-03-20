@@ -2,11 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.urls import reverse
-from finder.models import Business, Offer, OwnerAccount
+from finder.models import Business, Offer
 from finder.distance import calculate_distance
 from finder.forms import UserForm, UserAccountForm, UserLoginForm
-from django.contrib.auth.decorators import user_passes_test
-from finder.decorators import dec_test
+
 # Create your views here.
 
 def about(request):
@@ -47,36 +46,9 @@ def signUp(request):
     if request.method == "POST":
         user_form = UserForm(request.POST)
         account_form = UserAccountForm(request.POST)
-
-        print(user_form)
-        print("_______________________")
-        print(account_form)
-
-        
-        if user_form.is_valid():
+        if user_form.is_valid() and account_form.is_valid():
             user = user_form.save()
-            # Branching logic as to if we want to create an Owner
-            # or a Mortal user.
-            if request.POST.get("isOwner") == "True":
-                print("User is owner")
 
-                user.set_password(user.password)
-                user.save()
-
-                owner = OwnerAccount.create(user)
-                owner.save()
-
-                registered = True
-            else:
-                print("User is mortal")
-
-                account = account_form.save(commit=False)
-                account.user = user
-
-                account.save()
-
-                registered = True
-            '''
             user.set_password(user.password)
             user.save()
 
@@ -86,11 +58,9 @@ def signUp(request):
             account.save()
 
             registered = True
-            '''
         else:
             print(user_form.errors, account_form.errors)
     else:
-        print("Ooops form invalid ??")
         user_form = UserForm()
         account_form = UserAccountForm()
 
@@ -105,8 +75,7 @@ def user_login(request):
         password = request.POST.get('password')
 
         user = authenticate(username=username, password=password)
-        #print(user)
-        # If user is an owner or a mortal - we have different 
+        print(user)
         if user:
             if user.is_active:
                 login(request, user)
@@ -155,6 +124,5 @@ def account(request):
 def adminPanel(request):		
 	return render(request, 'finder/adminPanel.html')
 
-@user_passes_test(dec_test)
 def settings(request):
 	return render(request, 'finder/settings.html')

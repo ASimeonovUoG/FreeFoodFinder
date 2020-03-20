@@ -1,0 +1,27 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+<a href="{% url 'finder:find_food' %}">Return to Find Food</a><br />
+
+{% block title_block %}
+    {% if business %}
+        {{ business.businessName }}
+    {% else %}
+        Unknown Business
+    {% endif %}
+{% endblock %}
+
+{% block body_block %}
+    {% if business %}
+    <h1>{{ business.businessName }}</h1>
+    <div>
+        {{ business.picture }}
+        {{ business.description }}
+
+    
+
+    <a href="{% url 'finder:find_food' %}">Return to Find Food</a><br />
+    {% else %}
+    The specified category does not exist
+    {% endif %}
+{% endblock %}
