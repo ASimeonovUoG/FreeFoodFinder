@@ -3,44 +3,58 @@
 
 {% block body_block %}
 
-<div><h1>Free Food Finder</h1></div>
+<div class="title"><a href="{% url 'finder:home' %}"><img src="{% static 'images/logo.png' %}" alt="Free Food Finder"></a>
+    <h1><a href="{% url 'finder:home' %}">Free Food Finder</a></h1>
+</div>
 
 
-<div>
-<form class="form-inline"
-      id="user-form"
-      method="post"
-      action="{% url 'finder:home' %}">
+<div class="search-bar">
+    <form class="form-inline"
+          id="user-form"
+          method="post"
+          action="{% url 'finder:home' %}">
 
-    {% csrf_token %}
+        {% csrf_token %}
 
-    <div class="form-group">
+        <div class="form-group">
 
-        <input class="form-control"
-               type="text"
-               size="50"
-               name="query"
-               id="query"
-               placeholder="Enter your postcode!"
-               autofocus
-                />
-    </div>
+            <input class="form-control"
+                   type="text"
+                   size="50"
+                   name="query"
+                   id="query"
+                   placeholder="Enter your postcode!"
+                   autofocus
+            />
+        </div>
 
-    <button class="btn btn-primary"
-            type="submit"
-            name="submit">Search</button>
-</form>
+        <button class="btn btn-primary"
+                type="submit"
+                name="submit">Search
+        </button>
+    </form>
+</div>
 
-        <p>Free food finder connects restaurants with surplus food with the people who need it. Enter your postcode above to secure a free meal in your area!</p>
+<div id="description">
+    <p>Free food finder connects restaurants with surplus food with the people who need it. Enter your postcode above to
+        secure a free meal in your area!</p>
+</div>
 
- </div>
 
-{% if featured_offers %}
+<div class="featured-offers">
+    {% if featured_offers %}
     <h2>Featured Offers</h2>
     {% for offer in featured_offers %}
-        <!-- add info -->
-        {{ offer.business.businessName }}</br>
-        <img src="{{ offer.business.picture.url }}"/>
+    <div class="offer">
+        <a href="#"><img src="{{ offer.business.picture.url }}"/></a>
+        <div class="offer-info">
+            <h3><a href="#">{{ offer.business.businessName }}</a></h3>
+            Keywords: {{ offer.business.tags }}</br>
+            {{ offer.business.address }}</br>
+            {{ offer.portionAmount }} portions available now!
+        </div>
+    </div>
     {% endfor %}
-{% endif %}
+    {% endif %}
+</div>
 {% endblock %}

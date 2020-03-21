@@ -1,46 +1,117 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 
-<html>
+<html lang="en">
 <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/baseStyle.css' %}">
+
+
     <title>
-    {% block title_block %}
+        {% block title_block %}
         Free Food Finder
-    {% endblock %}
+        {% endblock %}
     </title>
 </head>
 <body>
 
-<!-- header and footer to be styled properly later-->
-<header>
-    <div class="topnav">
-        <a href="{% url 'finder:about' %}">About</a>
-        <a href="{% url 'finder:contact' %}">Contact</a>
-        {% if user.is_authenticated %}
-        <a href="{% url 'finder:account' %}">My Account</a>
-        <a href="{% url 'finder:user_logout' %}">Log Out</a>
-        {% else %}
-        <a href="{% url 'finder:sign-up' %}">Sign Up</a>
-        <a href="{% url 'finder:user_login' %}">Log In</a>
-        {% endif %}
-      </div>
-</header>
+<!--https://www.freecodecamp.org/news/how-to-keep-your-footer-where-it-belongs-59c6aa05c59c/-->
 
-<div>
-    <div id="message-Div">
-        {% if session %}
-          <p>{{session}}</p>
-          {% endif %}
+<div id="page-container">
+    <div id="content-wrap">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+            <a class="navbar-brand" href="{% url 'finder:home' %}">Free Food Finder</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'finder:about' %}">About <span class="sr-only">(current)</span></a>
+                    </li>
+
+                    {% if user.is_authenticated %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'finder:account' %}">My Account <span
+                                class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'finder:user_logout' %}">Log Out <span class="sr-only">(current)</span></a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'finder:sign-up' %}">Sign Up <span
+                                class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'finder:user_login' %}">Log In <span
+                                class="sr-only">(current)</span></a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+
+        <div>
+            <div id="message-Div">
+                {% if session %}
+                <p>{{session}}</p>
+                {% endif %}
+
+                <div>
+                    {% block body_block %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+                integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+                crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+                integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+                integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                crossorigin="anonymous"></script>
+
     </div>
-{% block body_block %}
-{% endblock %}
+
+<footer class="footer">
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <span class="navbar-text">© Team C 2020 </span>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'finder:contact' %}">Contact Us</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Become a Partner</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</footer>
+</div>
 </div>
 </body>
 
-<footer>
-    <ul>
-    <li>become a partner</li>
-    <li><a href="{% url 'finder:contact' %}">Contact us</a></li>
-    </ul>
-</footer>
 </html>

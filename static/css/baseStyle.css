@@ -1,0 +1,170 @@
+#page-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+#content-wrap {
+  padding-bottom: 20px;    /* Footer height */
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  height: 20px; /* Footer height */
+  line-height: 20px; /* Vertically center the text there */
+}
+
+.footer .navbar {
+  position: absolute;
+  bottom: 0;
+  width: 100vw;
+
+}
+
+.navbar {
+  background: #f2af58 !important;
+}
+
+.navbar .navbar-brand {
+    color: white !important;
+}
+
+.navbar .nav-link {
+    color: white !important;
+}
+
+.navbar .nav-text {
+    color: white !important;
+}
+
+/*#sidebar {
+    z-index: 1 !important;
+    width: 150px !important;
+    height: 100% !important;
+    background: rgb(107, 97, 97) !important;
+    color: white !important;
+    position: absolute !important;
+}*/
+/*
+
+ul ul {
+   padding: 10px !important;
+   border-bottom: 1px solid grey !important;
+}
+
+ul ul:hover {
+    background:bisque !important;
+    color: orange !important;
+}
+*/
+
+/*#page-content {
+    margin-left: 170px;
+    position: absolute;
+
+}
+
+.mr-3 {
+    margin-top: 20px;
+    wdith: 200px;
+    height: 200px;
+}*/
+
+.navbar a {
+    color: white;
+}
+
+.navbar a:hover {
+    color:orange;
+}
+
+
+/*home page specific*/
+.title {
+  color : #f2af58;
+  text-align: center;
+  margin: 50px;
+}
+
+
+/*so that the title is clickable but doesn't look like a link */
+.title h1 a {
+  color: #f2af58;
+  text-decoration: none;
+}
+
+h2 {
+  color: #f2af58;
+  text-align: center;
+}
+
+/*home page specific (so far) */
+/*https://stackoverflow.com/questions/43847658/how-to-center-input-horizontally-in-a-div*/
+.search-bar {
+    position: relative;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 50px;
+}
+
+#description {
+    text-align: center;
+    padding: 30px;
+}
+
+/* margin????????????*/
+.featured-offers {
+    margin-bottom: 20px;
+}
+
+
+.offer {
+    background-color: #e5e5e5;
+    /*this is necessary so that the background colour is visible */
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.offer img {
+    max-height: 300px;
+    max-width: 300px;
+    float: left;
+    clear: left;
+}
+
+
+.offer .offer-info {
+    float: left;
+    margin: 10px;
+    clear: right;
+}
+
+.offer a {
+    color: #f2af58;
+    text-decoration: none;
+
+}
+
+/*adapt the input form to the colour scheme*/
+.btn {
+    color: white ;
+    background-color: #f2af58 !important;
+    border-color: #f2af58 !important;
+}
+
+.btn:hover {
+    color: #f2af58 !important;
+    background-color: white !important;
+    border-color: #f2af58 !important;
+}
+
+/*https://formden.com/blog/input-color*/
+.form-control:focus {
+    border-color: #f2af58;
+    box-shadow: none;
+}
+
+
+
