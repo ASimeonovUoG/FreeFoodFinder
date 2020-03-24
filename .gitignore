@@ -7,3 +7,4 @@ thumbs.db
 *.pyc
 .vscode/
 finder/migrations/0001_initial.py
+*cpython-37.pyc

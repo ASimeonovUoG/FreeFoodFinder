@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    console.log("hey hi");
+    //console.log("hey hi");
     var but = $('#submitBut').click(function(event){
         event.preventDefault();
         var busCreds = $("#user_form_business input").toArray();

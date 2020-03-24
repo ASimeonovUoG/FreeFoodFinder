@@ -52,8 +52,6 @@ def signUp(request):
         print(user_form)
         print("_______________________")
         print(account_form)
-
-        
         if user_form.is_valid():
             user = user_form.save()
             # Branching logic as to if we want to create an Owner
@@ -71,23 +69,16 @@ def signUp(request):
             else:
                 print("User is mortal")
 
+                user.set_password(user.password)
+                user.save()
+
                 account = account_form.save(commit=False)
                 account.user = user
-
+            
                 account.save()
 
                 registered = True
-            '''
-            user.set_password(user.password)
-            user.save()
 
-            account = account_form.save(commit=False)
-            account.user = user
-            
-            account.save()
-
-            registered = True
-            '''
         else:
             print(user_form.errors, account_form.errors)
     else:
@@ -105,9 +96,7 @@ def user_login(request):
         username = request.POST.get('email')
         password = request.POST.get('password')
 
-        user = authenticate(username=username, password=password)
-        #print(user)
-        # If user is an owner or a mortal - we have different 
+        user = authenticate(email=username, password=password)
         if user:
             if user.is_active:
                 login(request, user)
