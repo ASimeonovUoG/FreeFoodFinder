@@ -5,7 +5,7 @@ from django.urls import reverse
 from finder.models import Business, Offer, OwnerAccount
 from finder.distance import calculate_distance
 from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from finder.decorators import dec_test
 
 # Create your views here.
@@ -164,6 +164,7 @@ def adminPanel(request):
     context_dict = {'business_form':business_form}
     return render(request, 'finder/adminPanel.html',context_dict)
 
+@login_required
 @user_passes_test(dec_test)
 def settings(request):
     if request.method == 'POST':
