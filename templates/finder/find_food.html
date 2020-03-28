@@ -7,17 +7,64 @@
 
 {% block body_block %}
 
-{% if businesses %}
-    {% for b in businesses %} 
-    <a href='/finder/find_food/{{ b.slug }}'/><strong>{{ b.businessName }}</strong> <br />
-        <img src="{{ b.picture.url }}" alt="Picture of Business"/><br />
-        {{ b.address }} <br />
-        Offers Until {{ b.offersUntil }} <br />
-    {% endfor %}
-{% else %}
-    <li><strong>There are no businesses to display.</strong></li>
-{% endif %}
+<div class="search-bar">
+    <form class="form-inline"
+          id="user-form"
+          method="post"
+          action="{% url 'finder:find_food' %}">
 
+        {% csrf_token %}
+
+        <div class="form-group">
+
+            <input class="form-control"
+                   type="text"
+                   size="50"
+                   name="query"
+                   id="query"
+                   placeholder="Enter your postcode!"
+                   autofocus
+            />
+        </div>
+
+        <button class="btn btn-primary"
+                type="submit"
+                name="submit">Search
+        </button>
+    </form>
+</div>
+
+<div class="search_error">
+    {% if invalid %}
+    <p>That didn't work. Please enter a valid UK postcode.</p>
+    {% endif %}
+</div>
+
+
+<div class="featured-offers">
+    {% if offers %}
+    {% if no_results %}
+    <div class="search_error"><p>There are currently no offers in your area. Please try again later, or have a look at our featured offers:</p></div>
+    <h2>Featured Offers</h2>
+    {% else %}
+    <h2>Search Results</h2>
+    {% endif %}
+    {% for offer in offers %}
+    <div class="offer">
+        <a href="{% url 'finder:show_business' offer.business.slug %}"><img src="{{ offer.business.picture.url }}"/></a>
+        <div class="offer-info">
+            <h3><a href="{% url 'finder:show_business' offer.business.slug %}">{{ offer.business.businessName }}</a></h3>
+            Keywords: {{ offer.business.tags }}<br/>
+            {{ offer.business.address }}<br/>
+            {{ offer.portionAmount }} portions available now!
+            Offers until: {{ offer.business.offersUntil }}
+        </div>
+    </div>
+    {% endfor %}
+
+    {% endif %}
+
+</div>
 {% endblock %}
 
 

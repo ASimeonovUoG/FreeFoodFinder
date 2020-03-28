@@ -36,7 +36,7 @@ def calculate_distance(location1_lat, location1_long, location2):
         location2_lat = location2_coords['lat']
         location2_long = location2_coords['lng']
     except:
-        raise Exception("invalid input")
+        raise ValueError("invalid input")
 
     #formula from https: // www.w3resource.com / python - exercises / math / python - math - exercise - 27.php
 
