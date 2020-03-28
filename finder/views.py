@@ -6,7 +6,7 @@ from finder.models import Business, Offer, OwnerAccount
 from finder.distance import calculate_distance
 from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm
 from django.contrib.auth.decorators import user_passes_test, login_required
-from finder.decorators import dec_test
+from finder.decorators import isOwner
 
 # Create your views here.
 
@@ -91,21 +91,14 @@ def show_business(request, business_name_slug):
 
 def signUp(request):
     registered = False
-
     if request.method == "POST":
         user_form = UserForm(request.POST)
         account_form = UserAccountForm(request.POST)
-
-        print(user_form)
-        print("_______________________")
-        print(account_form)
         if user_form.is_valid():
             user = user_form.save()
             # Branching logic as to if we want to create an Owner
             # or a Mortal user.
             if request.POST.get("isOwner") == "True":
-                print("User is owner")
-
                 user.set_password(user.password)
                 user.save()
 
@@ -114,8 +107,6 @@ def signUp(request):
 
                 registered = True
             else:
-                print("User is mortal")
-
                 user.set_password(user.password)
                 user.save()
 
@@ -129,7 +120,6 @@ def signUp(request):
         else:
             print(user_form.errors, account_form.errors)
     else:
-        print("Ooops form invalid ??")
         user_form = UserForm()
         account_form = UserAccountForm()
 
@@ -163,15 +153,21 @@ def user_logout(request):
     logout(request)
     return redirect(reverse('finder:home'))
 
+@login_required
 def support(request):
 	return render(request, 'finder/support.html')
 	
+@login_required
+@user_passes_test(isOwner)
 def myBusinesses(request):
 	return render(request, 'finder/myBusinesses.html')
 	
+@login_required
 def account(request):
 	return render(request, 'finder/account.html')
 
+@login_required
+@user_passes_test(isOwner)
 def adminPanel(request):
     if request.method == 'POST':
         business_form = BusinessForm(request.POST)
@@ -189,7 +185,6 @@ def adminPanel(request):
     return render(request, 'finder/adminPanel.html',context_dict)
 
 @login_required
-@user_passes_test(dec_test)
 def settings(request):
     if request.method == 'POST':
         settings_form = UserForm(request.POST)
