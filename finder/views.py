@@ -192,12 +192,8 @@ def myBusinesses(request):
     this_owner = OwnerAccount.objects.get(user=request.user)
     owner_businesses = list(Business.objects.filter(owner=this_owner))
     return render(request, 'finder/myBusinesses.html', {'user_businesses': owner_businesses})
-<<<<<<< HEAD
-	
-=======
 
 
->>>>>>> 9d3657c633953871ecfe4c28629b8bd783d101c5
 @login_required
 def account(request):
     return render(request, 'finder/account.html')

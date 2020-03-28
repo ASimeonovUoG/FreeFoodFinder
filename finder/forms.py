@@ -36,10 +36,10 @@ class BusinessForm(forms.ModelForm):
     Address = forms.CharField()
     Description = forms.CharField()
     Open = forms.CharField()
-    #OffersUntil = forms.
+    OffersUntil = forms.TimeField()
     Tags = forms.CharField()
     
 
     class Meta:
       model = Business
-      fields = ('BusinessName','Address','Description','Open','Tags')  
+      fields = ('BusinessName','Address','Description','Open','OffersUntil','Tags')  
