@@ -160,12 +160,9 @@ def support(request):
 @login_required
 @user_passes_test(isOwner)
 def myBusinesses(request):
-    all_businesses = []
-    businesses = Business.objects.values('businessName','description','picture')
-    for b in businesses:
-        all_businesses.append(b)
-        
-    return render(request, 'finder/myBusinesses.html', {'all_businesses':all_businesses})
+    this_owner = OwnerAccount.objects.get(user=request.user)
+    owner_businesses = list(Business.objects.filter(owner=this_owner))
+    return render(request, 'finder/myBusinesses.html', {'user_businesses': owner_businesses})
 	
 @login_required
 def account(request):
