@@ -7,14 +7,14 @@ My Businesses
 
 {% block body_block %}
     <div class="all_businesses">
-      {% if all_businesses %}
+      {% if user_businesses %}
       <h1>My Businesses</h1></div>
-      {% for business in all_businesses %}
+      {% for business in user_businesses %}
       <div class = "business">
-        <a href="#"><img src="{{ business.business.picture.url }}"/></a>
+        <a href="#"><img src="{{ business.picture.url }}"/></a>
         <div class="business-info">
-          <h3>{{ business.business.businessName }}</h3>
-          {{ business.business.description }}
+          <h3>{{ business.businessName }}</h3>
+          {{ business.description }}
         </div>
       </div>
       {% endfor %}
