@@ -38,6 +38,7 @@ class BusinessForm(forms.ModelForm):
     Open = forms.CharField()
     #OffersUntil = forms.
     Tags = forms.CharField()
+    
 
     class Meta:
       model = Business

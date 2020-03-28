@@ -143,7 +143,12 @@ def support(request):
 	return render(request, 'finder/support.html')
 	
 def myBusinesses(request):
-	return render(request, 'finder/myBusinesses.html')
+    all_businesses = []
+    businesses = Business.objects.values('businessName','description','picture')
+    for b in businesses:
+        all_businesses.append(b)
+        
+    return render(request, 'finder/myBusinesses.html', {'all_businesses':all_businesses})
 	
 def account(request):
 	return render(request, 'finder/account.html')
