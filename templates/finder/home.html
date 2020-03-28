@@ -8,6 +8,7 @@
 </div>
 
 
+
 <div class="search-bar">
     <form class="form-inline"
           id="user-form"
@@ -35,6 +36,13 @@
     </form>
 </div>
 
+<div class="search_error">
+    {% if invalid %}
+    <p>That didn't work. Please enter a valid UK postcode.</p>
+    {% endif %}
+</div>
+
+
 <div id="description">
     <p>Free food finder connects restaurants with surplus food with the people who need it. Enter your postcode above to
         secure a free meal in your area!</p>
@@ -46,9 +54,9 @@
     <h2>Featured Offers</h2>
     {% for offer in featured_offers %}
     <div class="offer">
-        <a href="#"><img src="{{ offer.business.picture.url }}"/></a>
+        <a href="{% url 'finder:show_business' offer.business.slug %}"><img src="{{ offer.business.picture.url }}"/></a>
         <div class="offer-info">
-            <h3><a href="#">{{ offer.business.businessName }}</a></h3>
+            <h3><a href="{% url 'finder:show_business' offer.business.slug %}">{{ offer.business.businessName }}</a></h3>
             Keywords: {{ offer.business.tags }}</br>
             {{ offer.business.address }}</br>
             {{ offer.portionAmount }} portions available now!
