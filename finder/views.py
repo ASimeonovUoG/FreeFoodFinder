@@ -100,6 +100,9 @@ def find_food(request):
 
             return render(request, 'finder/find_food.html',
                       {'invalid': invalid, 'no_results': no_results, 'offers': offers})
+    else:
+        return render(request, 'finder/find_food.html', {})
+
 
 
 def show_business(request, business_name_slug):
