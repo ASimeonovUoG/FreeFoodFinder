@@ -1,0 +1,85 @@
+/*Styling placeholders in input fields*/
+
+::-webkit-input-placeholder {
+    text-align: center;
+}
+
+:-moz-placeholder {
+    /* Firefox 18- */
+    text-align: center;
+}
+
+::-moz-placeholder {
+    /* Firefox 19+ */
+    text-align: center;
+}
+
+:-ms-input-placeholder {
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+}
+
+/*Login containers styling*/
+
+.login-container {
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.login-form-1 h3 {
+    color: #373737;
+}
+
+.login-form-2 h3 {
+    color: #373737;
+}
+
+.login-form-1 {
+    padding: 5%;
+    background: rgba(242, 175, 88, 0.5);
+    border-radius: 120px;
+}
+
+.login-form-2 {
+    padding: 5%;
+    background: #C5D2BF;
+    border-radius: 120px;
+}
+
+.login-container form {
+    padding: 10%;
+}
+
+input {
+    width: 100%;
+    border: 1px solid #cacaca;
+    height: 30px;
+    font-size: 16pt;
+}
+
+#submitBut {
+    width: 50%;
+    border-radius: 1rem;
+    padding: 1.5%;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: #fff;
+    background-color: #0062cc;
+}
+
+#butRow {
+    margin-top: -70px;
+}
+
+#butRow a {
+    color: #EE8907;
+    font-weight: 600;
+}
+
+#user_form_business p, #user_form_client p {
+    margin-bottom: 0.5rem;
+}
