@@ -8,6 +8,7 @@ from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm
 from django.contrib.auth.decorators import user_passes_test, login_required
 from finder.decorators import isOwner
 
+
 # Create your views here.
 
 def about(request):
@@ -17,26 +18,46 @@ def about(request):
 def contact(request):
     return render(request, 'finder/contact.html')
 
+
 def home(request):
     distance_threshold = 10
     FEATURED_THRESHOLD = 50
-    close_businesses = []
+    offers = []
     invalid = False
+    no_results = False
+    # note that everything in this if-clause also appears in find_food. It would be possible to first validate the input and then either display an
+    # error message on home.html or call find_food(). However if the input is valid that would require two calls to the maps API (one to validate
+    # the input, one to calculate the distance). Calls to the maps API are expensive (as in, they charge money for great amounts of calls). So it
+    # makes sense to limit the amount of calls to this API. Of course it would also be possible to just load the find_food template either way
+    # and display the error message there, but that can be confusing.
     if request.method == 'POST':
         query = request.POST['query'].strip()
         if query:
             businesses = Business.objects.all()
-
             for b in businesses:
                 try:
                     if calculate_distance(b.lat, b.long, query) < distance_threshold:
-                        close_businesses.append(b)
-                except:
+                        offer = Offer.objects.filter(business=b)
+                        # appends the offer because offers are associated with businesses. And a business should only appear
+                        # in the search results if it has an offer
+                        if len(offer) > 0:
+                            offers.append(offer[0])
+                # calculate_distance raises ValueError if it can't parse the data
+                except (ValueError):
                     invalid = True
-                    close_businesses = []
+                    offers = []
                     break
             if not invalid:
-                return render(request, 'finder/find_food.html', {'invalid': invalid, 'businesses': close_businesses})
+                # if the input is valid but there are no close offers, generate the list of featured offers instead, to send to find_food
+                if len(offers) == 0:
+                    no_results = True
+                    all_offers = Offer.objects.all()
+                    for o in all_offers:
+                        if o.portionAmount > FEATURED_THRESHOLD:
+                            offers.append(o)
+
+                return render(request, 'finder/find_food.html',
+                        {'invalid': invalid, 'no_results': no_results, 'offers': offers})
 
     featured_offers = []
     offers = Offer.objects.all()
@@ -47,31 +68,38 @@ def home(request):
 
 
 def find_food(request):
+    FEATURED_THRESHOLD = 50
     distance_threshold = 10
-    close_businesses = []
+    offers = []
     invalid = False
+    no_results = False
     if request.method == 'POST':
         query = request.POST['query'].strip()
         if query:
             businesses = Business.objects.all()
-
             for b in businesses:
                 try:
                     if calculate_distance(b.lat, b.long, query) < distance_threshold:
-                        close_businesses.append(b)
-                except:
+                        offer = Offer.objects.filter(business=b)
+
+                        if len(offer) > 0:
+                            offers.append(offer[0])
+
+                except (ValueError):
                     invalid = True
-                    close_businesses = []
+                    offers = []
                     break
             if not invalid:
-                return render(request, 'finder/find_food.html', {'invalid': invalid, 'businesses': close_businesses})
 
-    # business_list = Business.objects.order_by('businessName')
-    #
-    # context_dict = {}
-    # context_dict['businesses'] = business_list
-    #
-    return render(request, 'finder/find_food.html', {})
+                if len(offers) == 0:
+                    no_results = True
+                    all_offers = Offer.objects.all()
+                    for o in all_offers:
+                        if o.portionAmount > FEATURED_THRESHOLD:
+                            offers.append(o)
+
+            return render(request, 'finder/find_food.html',
+                      {'invalid': invalid, 'no_results': no_results, 'offers': offers})
 
 
 def show_business(request, business_name_slug):
@@ -112,7 +140,7 @@ def signUp(request):
 
                 account = account_form.save(commit=False)
                 account.user = user
-            
+
                 account.save()
 
                 registered = True
@@ -123,12 +151,12 @@ def signUp(request):
         user_form = UserForm()
         account_form = UserAccountForm()
 
-    context_dict =  {'user_form':user_form, 'account_form':account_form, 'registered':registered}
+    context_dict = {'user_form': user_form, 'account_form': account_form, 'registered': registered}
 
     return render(request, 'finder/signUp.html', context_dict)
 
-def user_login(request):
 
+def user_login(request):
     if request.method == "POST":
         username = request.POST.get('email')
         password = request.POST.get('password')
@@ -144,29 +172,36 @@ def user_login(request):
             return HttpResponse("Your credentials are invalid")
     else:
         login_form = UserLoginForm()
-        context_dict =  {'login_form':login_form}
-        return render(request, 'finder/user_login.html',context_dict)
-
+        context_dict = {'login_form': login_form}
+        return render(request, 'finder/user_login.html', context_dict)
 
 
 def user_logout(request):
     logout(request)
     return redirect(reverse('finder:home'))
 
+
 @login_required
 def support(request):
-	return render(request, 'finder/support.html')
-	
+    return render(request, 'finder/support.html')
+
+
 @login_required
 @user_passes_test(isOwner)
 def myBusinesses(request):
     this_owner = OwnerAccount.objects.get(user=request.user)
     owner_businesses = list(Business.objects.filter(owner=this_owner))
     return render(request, 'finder/myBusinesses.html', {'user_businesses': owner_businesses})
+<<<<<<< HEAD
 	
+=======
+
+
+>>>>>>> 9d3657c633953871ecfe4c28629b8bd783d101c5
 @login_required
 def account(request):
-	return render(request, 'finder/account.html')
+    return render(request, 'finder/account.html')
+
 
 @login_required
 @user_passes_test(isOwner)
@@ -183,8 +218,9 @@ def adminPanel(request):
     else:
         business_form = BusinessForm()
 
-    context_dict = {'business_form':business_form}
-    return render(request, 'finder/adminPanel.html',context_dict)
+    context_dict = {'business_form': business_form}
+    return render(request, 'finder/adminPanel.html', context_dict)
+
 
 @login_required
 def settings(request):
@@ -200,5 +236,5 @@ def settings(request):
     else:
         settings_form = UserForm()
 
-    context_dict = {'settings_form':settings_form}
-    return render(request, 'finder/settings.html',context_dict) 
+    context_dict = {'settings_form': settings_form}
+    return render(request, 'finder/settings.html', context_dict)
