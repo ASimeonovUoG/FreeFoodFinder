@@ -6,7 +6,7 @@ from finder.models import Business, Offer, OwnerAccount
 from finder.distance import calculate_distance
 from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm
 from django.contrib.auth.decorators import user_passes_test, login_required
-from finder.decorators import dec_test
+from finder.decorators import isOwner
 
 # Create your views here.
 
@@ -18,6 +18,8 @@ def contact(request):
     return render(request, 'finder/contact.html')
 
 def home(request):
+    distance_threshold = 10
+    FEATURED_THRESHOLD = 50
     close_businesses = []
     invalid = False
     if request.method == 'POST':
@@ -27,38 +29,76 @@ def home(request):
 
             for b in businesses:
                 try:
-                    if calculate_distance(b.address, query) < 10:
+                    if calculate_distance(b.lat, b.long, query) < distance_threshold:
                         close_businesses.append(b)
                 except:
                     invalid = True
                     close_businesses = []
                     break
+            if not invalid:
+                return render(request, 'finder/find_food.html', {'invalid': invalid, 'businesses': close_businesses})
 
     featured_offers = []
     offers = Offer.objects.all()
     for o in offers:
-        if o.portionAmount > 50:
+        if o.portionAmount > FEATURED_THRESHOLD:
             featured_offers.append(o)
-            print(featured_offers)
-    return render(request, 'finder/home.html', {'business_list': close_businesses, 'invalid': invalid, 'featured_offers': featured_offers})
-  
+    return render(request, 'finder/home.html', {'invalid': invalid, 'featured_offers': featured_offers})
+
+
+def find_food(request):
+    distance_threshold = 10
+    close_businesses = []
+    invalid = False
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+        if query:
+            businesses = Business.objects.all()
+
+            for b in businesses:
+                try:
+                    if calculate_distance(b.lat, b.long, query) < distance_threshold:
+                        close_businesses.append(b)
+                except:
+                    invalid = True
+                    close_businesses = []
+                    break
+            if not invalid:
+                return render(request, 'finder/find_food.html', {'invalid': invalid, 'businesses': close_businesses})
+
+    # business_list = Business.objects.order_by('businessName')
+    #
+    # context_dict = {}
+    # context_dict['businesses'] = business_list
+    #
+    return render(request, 'finder/find_food.html', {})
+
+
+def show_business(request, business_name_slug):
+    context_dict = {}
+
+    try:
+        business = Business.objects.get(slug=business_name_slug)
+
+        context_dict['business'] = business
+
+    except Business.DoesNotExist:
+
+        context_dict['business'] = None
+
+    return render(request, 'finder/individualBusiness.html', context_dict)
+
+
 def signUp(request):
     registered = False
-
     if request.method == "POST":
         user_form = UserForm(request.POST)
         account_form = UserAccountForm(request.POST)
-
-        print(user_form)
-        print("_______________________")
-        print(account_form)
         if user_form.is_valid():
             user = user_form.save()
             # Branching logic as to if we want to create an Owner
             # or a Mortal user.
             if request.POST.get("isOwner") == "True":
-                print("User is owner")
-
                 user.set_password(user.password)
                 user.save()
 
@@ -67,8 +107,6 @@ def signUp(request):
 
                 registered = True
             else:
-                print("User is mortal")
-
                 user.set_password(user.password)
                 user.save()
 
@@ -82,7 +120,6 @@ def signUp(request):
         else:
             print(user_form.errors, account_form.errors)
     else:
-        print("Ooops form invalid ??")
         user_form = UserForm()
         account_form = UserAccountForm()
 
@@ -109,39 +146,19 @@ def user_login(request):
         login_form = UserLoginForm()
         context_dict =  {'login_form':login_form}
         return render(request, 'finder/user_login.html',context_dict)
-    
-def find_food(request):
-    
-    business_list = Business.objects.order_by('businessName')
-    
-    context_dict = {}
-    context_dict['businesses'] = business_list
-    
-    return render(request, 'finder/find_food.html', context_dict)
 
-def show_business(request, business_name_slug):
-    
-    context_dict = {}
-    
-    try:
-        business = Business.objects.get(slug=business_name_slug)
-        
-        context_dict['business'] = business
-    
-    except Business.DoesNotExist:
-        
-        context_dict['business'] = None
-        
-    return render(request, 'finder/individualBusiness.html', context_dict)
-    
-    
+
+
 def user_logout(request):
     logout(request)
     return redirect(reverse('finder:home'))
 
+@login_required
 def support(request):
 	return render(request, 'finder/support.html')
 	
+@login_required
+@user_passes_test(isOwner)
 def myBusinesses(request):
     all_businesses = []
     businesses = Business.objects.values('businessName','description','picture')
@@ -150,9 +167,12 @@ def myBusinesses(request):
         
     return render(request, 'finder/myBusinesses.html', {'all_businesses':all_businesses})
 	
+@login_required
 def account(request):
 	return render(request, 'finder/account.html')
 
+@login_required
+@user_passes_test(isOwner)
 def adminPanel(request):
     if request.method == 'POST':
         business_form = BusinessForm(request.POST)
@@ -170,7 +190,6 @@ def adminPanel(request):
     return render(request, 'finder/adminPanel.html',context_dict)
 
 @login_required
-@user_passes_test(dec_test)
 def settings(request):
     if request.method == 'POST':
         settings_form = UserForm(request.POST)

@@ -1,34 +1,39 @@
 /*to keep the footer at the bottom*/
+
 /*page-container includes the entire page (header, main content, footer)*/
+
 /* https://www.freecodecamp.org/news/how-to-keep-your-footer-where-it-belongs-59c6aa05c59c/ */
+
 #page-container {
-  position: relative;
-  min-height: 100vh;
+    position: relative;
+    min-height: 100vh;
 }
 
 /*content wrap includes the header and main content. The padding at the bottom allows space for
 the footer*/
+
 #content-wrap {
-  padding-bottom: 20px;    /* Footer height */
+    padding-bottom: 20px;
+    /* Footer height */
 }
 
 .footer {
-  position: fixed;
-  bottom: 0;
-  height: 20px;
-  line-height: 20px;
+    position: fixed;
+    bottom: 0;
+    height: 20px;
+    line-height: 20px;
 }
 
 .footer .navbar {
-  position: absolute;
-  bottom: 0;
-  width: 100vw;
-
+    position: absolute;
+    bottom: 0;
+    width: 100vw;
 }
 
 /*navbar design*/
+
 .navbar {
-  background: #f2af58 !important;
+    background: #f2af58 !important;
 }
 
 .navbar .navbar-brand {
@@ -48,37 +53,38 @@ the footer*/
 }
 
 .navbar a:hover {
-    color:orange;
+    color: orange;
 }
 
 /*general h2 design*/
+
 h2 {
-  color: #f2af58;
-  text-align: center;
+    color: #f2af58;
+    text-align: center;
 }
 
 /*so that the title is clickable but doesn't look like a link */
-.title {
-  color : #f2af58;
-  text-align: center;
-  margin: 50px;
-}
 
+.title {
+    color: #f2af58;
+    text-align: center;
+    /* margin: 50px; */
+}
 
 .title h1 a {
-  color: #f2af58;
-  text-decoration: none;
+    color: #f2af58;
+    text-decoration: none;
 }
 
-
 /*text on the home page*/
+
 #description {
     text-align: center;
     padding: 30px;
 }
 
-
 /*list of featured offers*/
+
 .featured-offers {
     margin-bottom: 20px;
 }
@@ -97,7 +103,6 @@ h2 {
     clear: left;
 }
 
-
 .offer .offer-info {
     float: left;
     margin: 10px;
@@ -107,12 +112,14 @@ h2 {
 .offer a {
     color: #f2af58;
     text-decoration: none;
-
 }
 
 /*search bar css*/
+
 /*adapt the input form to the colour scheme*/
+
 /*https://stackoverflow.com/questions/43847658/how-to-center-input-horizontally-in-a-div*/
+
 .search-bar {
     position: relative;
     display: flex;
@@ -123,7 +130,7 @@ h2 {
 }
 
 .btn {
-    color: white ;
+    color: white;
     background-color: #f2af58 !important;
     border-color: #f2af58 !important;
 }
@@ -135,12 +142,14 @@ h2 {
 }
 
 /*https://formden.com/blog/input-color*/
+
 .form-control:focus {
     border-color: #f2af58;
     box-shadow: none;
 }
 
 /*error text*/
+
 .search_error {
     color: red;
     text-align: center;

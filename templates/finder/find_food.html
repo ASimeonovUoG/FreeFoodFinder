@@ -10,8 +10,7 @@
 {% if businesses %}
     {% for b in businesses %} 
     <a href='/finder/find_food/{{ b.slug }}'/><strong>{{ b.businessName }}</strong> <br />
-        <img src="/media/businesses/{{ b.slug }}" 
-             alt="Picture of Business"/><br />
+        <img src="{{ b.picture.url }}" alt="Picture of Business"/><br />
         {{ b.address }} <br />
         Offers Until {{ b.offersUntil }} <br />
     {% endfor %}

@@ -141,3 +141,6 @@ MEDIA_URL= '/media/'
 
 # Use CustomerUser model
 AUTH_USER_MODEL = 'cuser.CUser'
+
+# Login URL for decorators to redirect to
+LOGIN_URL = 'finder:user_login'
