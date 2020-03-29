@@ -6,13 +6,38 @@ Log In
 {% endblock %}
 
 {% block body_block %}
-    <div>
-        <h1 style="text-align: center;">Login Page Placeholder</h1>
-    </div>
 
-    <form id="login_form" method="post" action="{% url 'finder:user_login' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ login_form.as_p }}
-        <input type="submit" name="submit" value="Log In" />
-    </form>
+<div class="title"><a href="{% url 'finder:home' %}"><img src="{% static 'images/logo.png' %}"
+            alt="Free Food Finder"></a>
+</div>
+
+{% if registered %}
+<h1>Thank you for registering.
+    Log in <a href="{% url 'finder:user_login' %}">here.</a>
+</h1>
+{% else %}
+<h1>Log In here:</h1>
+
+{% if login_form.errors %}
+{% for field in login_form %}
+{% for error in field.errors %}
+<div class="alert alert-danger">
+    <strong>{{ error|escape }}</strong>
+</div>
+{% endfor %}
+{% endfor %}
+{% for error in login_form.non_field_errors %}
+<div class="alert alert-danger">
+    <strong>{{ error|escape }}</strong>
+</div>
+{% endfor %}
+{% endif %}
+
+<form id="login_form" method="post" action="{% url 'finder:user_login' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ login_form.as_p }}
+    <input type="submit" name="submit" value="Log In" />
+</form>
+{% endif %}
+
 {% endblock %}
