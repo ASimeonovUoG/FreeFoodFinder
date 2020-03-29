@@ -4,8 +4,16 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm
 User = get_user_model()
 
+class NonstickyEmailInput(forms.EmailInput):
+    '''Custom email input widget that's "non-sticky"
+    (i.e. does not remember submitted values).
+    '''
+    def get_context(self, name, value, attrs):
+        value = None  # Clear the submitted value.
+        return super().get_context(name, value, attrs)
+
 class UserForm(forms.ModelForm):
-    email = forms.CharField(label="",widget=forms.EmailInput(attrs={'placeholder': 'Email'}))
+    email = forms.CharField(label="",widget=NonstickyEmailInput(attrs={'placeholder': 'Email'}))
     password = forms.CharField(label="",widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
     isOwner = forms.BooleanField(widget=forms.HiddenInput(), initial="False", required=False)
 
@@ -43,3 +51,4 @@ class BusinessForm(forms.ModelForm):
     class Meta:
       model = Business
       fields = ('BusinessName','Address','Description','Open','OffersUntil','Tags')  
+

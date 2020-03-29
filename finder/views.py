@@ -178,7 +178,8 @@ def signUp(request):
                 registered = True
 
         else:
-            print(user_form.errors, account_form.errors)
+            None
+            #print(user_form.errors, account_form.errors)
     else:
         user_form = UserForm()
         account_form = UserAccountForm()
