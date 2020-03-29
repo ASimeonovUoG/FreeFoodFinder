@@ -1,6 +1,7 @@
 from django import forms
 from finder.models import UserAccount, OwnerAccount, Business
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserChangeForm
 User = get_user_model()
 
 class UserForm(forms.ModelForm):
@@ -24,12 +25,11 @@ class UserLoginForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('email','password',)
-"""
-class Update_form(forms.ModelForm):
+
+class Update_form(UserChangeForm):
     class Meta:
         model = User
-        fields = ('email','password',)
-"""
+        fields = ('email',)
 
 class BusinessForm(forms.ModelForm):
     BusinessName = forms.CharField()

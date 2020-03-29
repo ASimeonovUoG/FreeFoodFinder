@@ -4,10 +4,10 @@ from django.http import HttpResponse
 from django.urls import reverse
 from finder.models import Business, Offer, OwnerAccount
 from finder.distance import calculate_distance
-from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm
+from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm, Update_form
 from django.contrib.auth.decorators import user_passes_test, login_required
 from finder.decorators import isOwner
-from django.contrib.auth.forms import PasswordChangeForm 
+from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm 
 from django.contrib.auth import update_session_auth_hash
 
 
@@ -187,6 +187,7 @@ def user_logout(request):
 
 
 @login_required
+@user_passes_test(isOwner)
 def support(request):
     return render(request, 'finder/support.html')
 
@@ -226,17 +227,20 @@ def adminPanel(request):
 @login_required
 def settings(request):
     if request.method == 'POST':
-        settings_form = PasswordChangeForm(data=request.POST, user = request.user)
+        password_form = PasswordChangeForm(data=request.POST, user = request.user)
+        email_form = Update_form(request.POST, instance = request.user)
 
-        print(settings_form)
+        #print(password_form)
 
-        if settings_form.is_valid():
-            user = settings_form.save()
-            update_session_auth_hash(request,settings_form.user)
+        if password_form.is_valid() and email_form.is_valid():
+            user = password_form.save()
+            email_form.save()
+            update_session_auth_hash(request,password_form.user)
             return redirect('finder:account')
 
     else:
-        settings_form = PasswordChangeForm(user=request.user)
+        password_form = PasswordChangeForm(user=request.user)
+        email_form = Update_form(instance = request.user)
 
-    context_dict = {'settings_form': settings_form}
+    context_dict = {'password_form': password_form, 'email_form': email_form}
     return render(request, 'finder/settings.html', context_dict)

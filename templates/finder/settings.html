@@ -14,7 +14,8 @@ Settings
         </p>
         <form method ="post">
           {% csrf_token %}
-          {{ settings_form.as_p }}
+          {{ email_form.as_p }}
+          {{ password_form.as_p }}
           <button type="submit">Save Changes</button>  </button>
         </form>
     </div>
