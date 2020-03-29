@@ -24,14 +24,32 @@
                    id="query"
                    placeholder="Enter your postcode!"
                    autofocus
+                   required
             />
         </div>
+
+<!--        select the search radius-->
+<!--            https://www.w3schools.com/tags/tag_select.asp-->
+        <div class="form-group">
+            <select class="form-control" id="radius" name="radius">
+<!--                https://stackoverflow.com/questions/22822427/bootstrap-select-dropdown-list-placeholder-->
+<!--                10 is the default-->
+                <option value="10" selected>Default search radius</option>
+                <option value="1">1km</option>
+                <option value="5">5km</option>
+                <option value="10">10km</option>
+                <option value="25">25km</option>
+                <option value="50">50km</option>
+            </select>
+  </div>
+
 
         <button class="btn btn-primary"
                 type="submit"
                 name="submit">Search
         </button>
     </form>
+
 </div>
 
 <div class="search_error">

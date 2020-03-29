@@ -26,6 +26,7 @@
                    id="query"
                    placeholder="Enter your postcode!"
                    autofocus
+                   required
             />
         </div>
 
@@ -60,6 +61,8 @@
             Keywords: {{ offer.business.tags }}</br>
             {{ offer.business.address }}</br>
             {{ offer.portionAmount }} portions available now!
+            Offers until: {{ offer.business.offersUntil }}
+
         </div>
     </div>
     {% endfor %}

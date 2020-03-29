@@ -75,6 +75,10 @@ def find_food(request):
     no_results = False
     if request.method == 'POST':
         query = request.POST['query'].strip()
+        radius = request.POST['radius'].strip()
+        if radius:
+            distance_threshold = int(radius)
+
         if query:
             businesses = Business.objects.all()
             for b in businesses:
