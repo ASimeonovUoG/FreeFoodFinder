@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.urls import reverse
 from finder.models import Business, Offer, OwnerAccount, UserAccount
-from finder.distance import calculate_distance
+from finder.distance import calculate_distance, read_google_key
 from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm
 from django.contrib.auth.decorators import user_passes_test, login_required
 from finder.decorators import isOwner
@@ -133,14 +133,18 @@ def find_food(request):
         return render(request, 'finder/find_food.html', {})
 
 
-
 def show_business(request, business_name_slug):
     context_dict = {}
 
     try:
         business = Business.objects.get(slug=business_name_slug)
-
         context_dict['business'] = business
+        context_dict['key'] = read_google_key()
+
+        #if the restaurant currently has an offer, put that in the context dict as well
+        offer = Offer.objects.filter(business=business)
+        if len(offer) != 0:
+            context_dict['offer'] = offer[0]
 
     except Business.DoesNotExist:
 

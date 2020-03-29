@@ -2,7 +2,6 @@
 {% load staticfiles %}
 
 
-
 {% block title_block %}
     {% if business %}
         {{ business.businessName }}
@@ -12,20 +11,61 @@
 {% endblock %}
 
 {% block body_block %}
-
-
     {% if business %}
-        <h1>{{ business.businessName }}</h1><br />
-    
-        <img src='/media/businesses/{{ business.picture }}'/>{{ business.picture }} <br />
-        {{ business.description }} <br />
+        <h1 class="title">{{ business.businessName }}</h1><br/>
+
+        <div class="business-info">
+            <img  src='{{ business.picture.url }}' alt="{{ business.businessName }}"/>
+        <div id="business-descr">
+            <p>
         {{ business.address }} <br />
-        Working Hours: {{ business.workingTime}} <br />
-        Offers Until {{ business.offersUntil }} <br />
-       
-<strong><a href='/finder/find_food/'/> Return to Find Food </strong>
+        Working Hours: {{ business.workingTime}} <br/>
+                Offers until: {{ business.offersUntil }}<br/><br/>
+            {{ business.description }}
+            <br/><br/>
+
+        </p>
+
+
+           {% if offer %}
+                Currently {{ offer.portionAmount }} offers!
+                {% if user.is_authenticated %}
+               <form class="form-inline"
+                     id="reserve"
+                    method="post"
+                    action="{% url 'finder:reserve' %}">
+
+                {% csrf_token %}
+
+                <button class="btn btn-primary"
+                    type="submit"
+                    id="reserve_meal"
+                    name="reserve_meal"
+                    value="{{ offer.id }}">Grab one</button>
+                </form>
+                {% else %}
+                    <br/>
+                    <a class="btn btn-primary" href="{% url 'finder:user_login' %}" role="button">Grab one</a>
+                {% endif %}
+            {% else %}
+                There are currently no offers available.
+            {% endif %}
+        </div>
+        </div>
+
+
+    <div id="restaurant-map">
+<!--https://developers.google.com/maps/documentation/embed/guide-->
+    <iframe
+     width="450"
+     height="250"
+    frameborder="0" style="border:0"
+     src="https://www.google.com/maps/embed/v1/search?key={{ key }}&q={{ business.lat }},{{ business.long }}" allowfullscreen>
+    </iframe>
+    </div>
 
     {% else %}
     The specified business does not exist
     {% endif %}
+
 {% endblock %}

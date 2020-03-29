@@ -158,3 +158,36 @@ h2 {
     color: red;
     text-align: center;
 }
+
+
+/*individual business page*/
+
+.business-info {
+    overflow: auto;
+    background-color: #e5e5e5;
+}
+
+.business-info img {
+    max-height: 500px;
+    max-width: 500px;
+    float: left;
+}
+
+.business-info btn {
+    position: relative;
+    margin: 40px;
+}
+
+
+#restaurant-map {
+    /*space for the footer */
+    clear: left;
+    margin-bottom: 50px;
+    }
+
+#restaurant-map iframe {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}
