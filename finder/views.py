@@ -7,6 +7,8 @@ from finder.distance import calculate_distance
 from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm
 from django.contrib.auth.decorators import user_passes_test, login_required
 from finder.decorators import isOwner
+from django.contrib.auth.forms import PasswordChangeForm 
+from django.contrib.auth import update_session_auth_hash
 
 
 # Create your views here.
@@ -251,16 +253,17 @@ def adminPanel(request):
 @login_required
 def settings(request):
     if request.method == 'POST':
-        settings_form = UserForm(request.POST)
+        settings_form = PasswordChangeForm(data=request.POST, user = request.user)
 
         print(settings_form)
 
         if settings_form.is_valid():
             user = settings_form.save()
+            update_session_auth_hash(request,settings_form.user)
             return redirect('finder:account')
 
     else:
-        settings_form = UserForm()
+        settings_form = PasswordChangeForm(user=request.user)
 
     context_dict = {'settings_form': settings_form}
     return render(request, 'finder/settings.html', context_dict)
