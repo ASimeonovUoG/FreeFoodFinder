@@ -7,11 +7,11 @@ from finder.distance import calculate_distance
 from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm, Update_form
 from django.contrib.auth.decorators import user_passes_test, login_required
 from finder.decorators import isOwner
-from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm 
+from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
 from django.contrib.auth import update_session_auth_hash
 
-
 # Create your views here.
+
 
 def about(request):
     return render(request, 'finder/about.html')
@@ -34,13 +34,14 @@ def reserve(request):
                 offer_id = request.POST['reserve_meal'].strip()
                 offer = Offer.objects.get(id=offer_id)
                 this_user.reservation = offer
-                offer.portionAmount = offer.portionAmount -1
+                offer.portionAmount = offer.portionAmount - 1
                 this_user.save()
                 offer.save()
                 reserved_business = offer.business
             else:
                 reserved_business = None
-        return render(request, 'finder/reserve.html', {"reserved_business":reserved_business})
+        return render(request, 'finder/reserve.html',
+                      {"reserved_business": reserved_business})
     return render(request, 'finder/reserve.html', {})
 
 
@@ -61,7 +62,8 @@ def home(request):
             businesses = Business.objects.all()
             for b in businesses:
                 try:
-                    if calculate_distance(b.lat, b.long, query) < distance_threshold:
+                    if calculate_distance(b.lat, b.long,
+                                          query) < distance_threshold:
                         offer = Offer.objects.filter(business=b)
                         # appends the offer because offers are associated with businesses. And a business should only appear
                         # in the search results if it has an offer
@@ -81,15 +83,21 @@ def home(request):
                         if o.portionAmount > FEATURED_THRESHOLD:
                             offers.append(o)
 
-                return render(request, 'finder/find_food.html',
-                        {'invalid': invalid, 'no_results': no_results, 'offers': offers})
+                return render(request, 'finder/find_food.html', {
+                    'invalid': invalid,
+                    'no_results': no_results,
+                    'offers': offers
+                })
 
     featured_offers = []
     offers = Offer.objects.all()
     for o in offers:
         if o.portionAmount > FEATURED_THRESHOLD:
             featured_offers.append(o)
-    return render(request, 'finder/home.html', {'invalid': invalid, 'featured_offers': featured_offers})
+    return render(request, 'finder/home.html', {
+        'invalid': invalid,
+        'featured_offers': featured_offers
+    })
 
 
 def find_food(request):
@@ -108,7 +116,8 @@ def find_food(request):
             businesses = Business.objects.all()
             for b in businesses:
                 try:
-                    if calculate_distance(b.lat, b.long, query) < distance_threshold:
+                    if calculate_distance(b.lat, b.long,
+                                          query) < distance_threshold:
                         offer = Offer.objects.filter(business=b)
 
                         if len(offer) > 0:
@@ -127,11 +136,13 @@ def find_food(request):
                         if o.portionAmount > FEATURED_THRESHOLD:
                             offers.append(o)
 
-            return render(request, 'finder/find_food.html',
-                      {'invalid': invalid, 'no_results': no_results, 'offers': offers})
+            return render(request, 'finder/find_food.html', {
+                'invalid': invalid,
+                'no_results': no_results,
+                'offers': offers
+            })
     else:
         return render(request, 'finder/find_food.html', {})
-
 
 
 def show_business(request, business_name_slug):
@@ -184,12 +195,16 @@ def signUp(request):
         user_form = UserForm()
         account_form = UserAccountForm()
 
-    context_dict = {'user_form': user_form, 'account_form': account_form, 'registered': registered}
+    context_dict = {
+        'user_form': user_form,
+        'account_form': account_form,
+        'registered': registered
+    }
 
     return render(request, 'finder/signUp.html', context_dict)
 
 
-def user_login(request):
+def user_loginOLD(request):
     if request.method == "POST":
         username = request.POST.get('email')
         password = request.POST.get('password')
@@ -209,6 +224,17 @@ def user_login(request):
         return render(request, 'finder/user_login.html', context_dict)
 
 
+def user_login(request):
+    login_form = UserLoginForm(request.POST or None)
+    if request.POST and login_form.is_valid():
+        user = login_form.login(request)
+        if user:
+            login(request, user)
+            return redirect(reverse('finder:home'))  # Redirect to a success page.
+    context_dict = {'login_form': login_form}
+    return render(request, 'finder/user_login.html', context_dict)
+
+
 def user_logout(request):
     logout(request)
     return redirect(reverse('finder:home'))
@@ -225,7 +251,8 @@ def support(request):
 def myBusinesses(request):
     this_owner = OwnerAccount.objects.get(user=request.user)
     owner_businesses = list(Business.objects.filter(owner=this_owner))
-    return render(request, 'finder/myBusinesses.html', {'user_businesses': owner_businesses})
+    return render(request, 'finder/myBusinesses.html',
+                  {'user_businesses': owner_businesses})
 
 
 @login_required
@@ -255,20 +282,21 @@ def adminPanel(request):
 @login_required
 def settings(request):
     if request.method == 'POST':
-        password_form = PasswordChangeForm(data=request.POST, user = request.user)
-        email_form = Update_form(request.POST, instance = request.user)
+        password_form = PasswordChangeForm(data=request.POST,
+                                           user=request.user)
+        email_form = Update_form(request.POST, instance=request.user)
 
         #print(password_form)
 
         if password_form.is_valid() and email_form.is_valid():
             user = password_form.save()
             email_form.save()
-            update_session_auth_hash(request,password_form.user)
+            update_session_auth_hash(request, password_form.user)
             return redirect('finder:account')
 
     else:
         password_form = PasswordChangeForm(user=request.user)
-        email_form = Update_form(instance = request.user)
+        email_form = Update_form(instance=request.user)
 
     context_dict = {'password_form': password_form, 'email_form': email_form}
     return render(request, 'finder/settings.html', context_dict)
