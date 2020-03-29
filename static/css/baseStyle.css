@@ -109,6 +109,10 @@ h2 {
     clear: right;
 }
 
+.offer .btn {
+    color: white; !important
+}
+
 .offer a {
     color: #f2af58;
     text-decoration: none;

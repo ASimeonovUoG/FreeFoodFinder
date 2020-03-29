@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.urls import reverse
-from finder.models import Business, Offer, OwnerAccount
+from finder.models import Business, Offer, OwnerAccount, UserAccount
 from finder.distance import calculate_distance
 from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm
 from django.contrib.auth.decorators import user_passes_test, login_required
@@ -17,6 +17,29 @@ def about(request):
 
 def contact(request):
     return render(request, 'finder/contact.html')
+
+
+def reserve(request):
+    if request.method == 'POST':
+        this_user = UserAccount.objects.filter(user=request.user)
+
+        #no UserAccount was found where request.user is the user. That is, the user is an owner.
+        if len(this_user) == 0:
+            reserved_business = None
+        else:
+            this_user = this_user[0]
+            if this_user.reservation is None:
+                offer_id = request.POST['reserve_meal'].strip()
+                offer = Offer.objects.get(id=offer_id)
+                this_user.reservation = offer
+                offer.portionAmount = offer.portionAmount -1
+                this_user.save()
+                offer.save()
+                reserved_business = offer.business
+            else:
+                reserved_business = None
+        return render(request, 'finder/reserve.html', {"reserved_business":reserved_business})
+    return render(request, 'finder/reserve.html', {})
 
 
 def home(request):

@@ -76,6 +76,29 @@
             {{ offer.business.address }}<br/>
             {{ offer.portionAmount }} portions available now!
             Offers until: {{ offer.business.offersUntil }}
+
+             {% if user.is_authenticated %}
+            <form class="form-inline"
+            id="reserve"
+            method="post"
+            action="{% url 'finder:reserve' %}">
+
+            {% csrf_token %}
+
+            <button class="btn btn-primary"
+                type="submit"
+                id="reserve_meal"
+                name="reserve_meal"
+                value="{{ offer.id }}">Grab one</button>
+            </form>
+
+<!--            if the user is not logged in the button should still appear but they are redirected to the login page-->
+            {% else %}
+            <br/>
+            <a class="btn btn-primary" href="{% url 'finder:user_login' %}" role="button">Grab one</a>
+            {% endif %}
+
+
         </div>
     </div>
     {% endfor %}
