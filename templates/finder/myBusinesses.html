@@ -11,7 +11,7 @@ My Businesses
       <h1>My Businesses</h1></div>
       {% for business in user_businesses %}
       <div class = "business">
-        <a href="#"><img src="{{ business.picture.url }}"/></a>
+        <a href="{% url 'finder:adminPanel' %}"><img src="{{ business.picture.url }}"/></a>
         <div class="business-info">
           <h3>{{ business.businessName }}</h3>
           {{ business.description }}

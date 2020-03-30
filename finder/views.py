@@ -270,6 +270,9 @@ def account(request):
 @login_required
 @user_passes_test(isOwner)
 def adminPanel(request):
+    this_owner = OwnerAccount.objects.get(user=request.user)
+    owner_businesses = list(Business.objects.filter(owner=this_owner))
+
     if request.method == 'POST':
         business_form = BusinessForm(request.POST)
 
