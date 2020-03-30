@@ -29,13 +29,11 @@ class Business(models.Model):
     workingTime = models.CharField(max_length=128)
     offersUntil = models.TimeField()
     tags = models.CharField(max_length=256)
-
     picture = models.ImageField(upload_to='businesses', blank=True)
-
 
     lat = models.FloatField()
     long = models.FloatField()
-    slug=models.SlugField(unique=True)
+    slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.businessName)
@@ -56,6 +54,11 @@ class Business(models.Model):
 class Offer(models.Model):
     business = models.OneToOneField(Business, on_delete=models.CASCADE)
     portionAmount = models.IntegerField()
+
+    def save(self, *args, **kwargs):
+        if self.portionAmount < 0:
+            self.portionAmount = 0
+        super(Offer, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.business.businessName + " ( " + str(self.portionAmount) + " )"

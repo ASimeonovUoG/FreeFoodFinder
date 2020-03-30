@@ -25,7 +25,7 @@ def get_coords(address):
         long = coords['lng']
         return lat, long
     except:
-        raise Exception("invalid input")
+        raise ValueError("invalid input")
 
 #calculates the distance between a set of coordinates (the coordinates of the business, stored in the database) and
 #another location
