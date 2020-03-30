@@ -25,24 +25,25 @@ def contact(request):
 
 def reserve(request):
     if request.method == 'POST':
-        this_user = UserAccount.objects.filter(user=request.user)
+        if request.user.is_authenticated:
+            this_user = UserAccount.objects.filter(user=request.user)
 
         #no UserAccount was found where request.user is the user. That is, the user is an owner.
-        if len(this_user) == 0:
-            reserved_business = None
-        else:
-            this_user = this_user[0]
-            if this_user.reservation is None:
-                offer_id = request.POST['reserve_meal'].strip()
-                offer = Offer.objects.get(id=offer_id)
-                this_user.reservation = offer
-                offer.portionAmount = offer.portionAmount - 1
-                this_user.save()
-                offer.save()
-                reserved_business = offer.business
-            else:
+            if len(this_user) == 0:
                 reserved_business = None
-        return render(request, 'finder/reserve.html',
+            else:
+                this_user = this_user[0]
+                if this_user.reservation is None:
+                    offer_id = request.POST['reserve_meal'].strip()
+                    offer = Offer.objects.get(id=offer_id)
+                    this_user.reservation = offer
+                    offer.portionAmount = offer.portionAmount - 1
+                    this_user.save()
+                    offer.save()
+                    reserved_business = offer.business
+                else:
+                    reserved_business = None
+            return render(request, 'finder/reserve.html',
                       {"reserved_business": reserved_business})
     return render(request, 'finder/reserve.html', {})
 
@@ -60,6 +61,7 @@ def home(request):
     # and display the error message there, but that can be confusing.
     if request.method == 'POST':
         query = request.POST['query'].strip()
+
         if query:
             businesses = Business.objects.all()
             for b in businesses:
@@ -72,10 +74,11 @@ def home(request):
                         if len(offer) > 0:
                             offers.append(offer[0])
                 # calculate_distance raises ValueError if it can't parse the data
-                except (ValueError):
+                except ValueError:
                     invalid = True
                     offers = []
                     break
+
             if not invalid:
                 # if the input is valid but there are no close offers, generate the list of featured offers instead, to send to find_food
                 if len(offers) == 0:
@@ -96,6 +99,7 @@ def home(request):
     for o in offers:
         if o.portionAmount > FEATURED_THRESHOLD:
             featured_offers.append(o)
+
     return render(request, 'finder/home.html', {
         'invalid': invalid,
         'featured_offers': featured_offers
@@ -125,7 +129,7 @@ def find_food(request):
                         if len(offer) > 0:
                             offers.append(offer[0])
 
-                except (ValueError):
+                except ValueError:
                     invalid = True
                     offers = []
                     break
@@ -267,11 +271,38 @@ def account(request):
     return render(request, 'finder/account.html')
 
 
+# @login_required
+# @user_passes_test(isOwner)
+# def adminPanel(request):
+#     this_owner = OwnerAccount.objects.get(user=request.user)
+#     owner_businesses = list(Business.objects.filter(owner=this_owner))
+#
+#     if request.method == 'POST':
+#         business_form = BusinessForm(request.POST)
+#
+#         print(business_form)
+#
+#         if business_form.is_valid():
+#             business = business_form.save()
+#             return redirect('finder:myBusinesses')
+#
+#     else:
+#         business_form = BusinessForm()
+#
+#     context_dict = {'business_form': business_form}
+#     return render(request, 'finder/adminPanel.html', context_dict)
+
 @login_required
 @user_passes_test(isOwner)
-def adminPanel(request):
-    this_owner = OwnerAccount.objects.get(user=request.user)
-    owner_businesses = list(Business.objects.filter(owner=this_owner))
+def adminPanel(request, business_name_slug):
+    current_offer = None
+    business = None
+    business = Business.objects.filter(slug=business_name_slug)
+    if len(business) != 0:
+        business = business[0]
+        business_offer = Offer.objects.filter(business=business)
+        if len(business_offer) != 0:
+            current_offer = business_offer[0]
 
     if request.method == 'POST':
         business_form = BusinessForm(request.POST)
@@ -282,11 +313,31 @@ def adminPanel(request):
             business = business_form.save()
             return redirect('finder:myBusinesses')
 
-    else:
-        business_form = BusinessForm()
+        end_offer_id = request.POST['end_offer_id']
+        if end_offer_id:
+            end_offer(end_offer_id)
 
-    context_dict = {'business_form': business_form}
+    else:
+        #prepopulate the fields
+        business_form = BusinessForm(initial = {'BusinessName' : business.businessName,
+                                                'Address': business.address,
+                                                'Description': business.description,
+                                                'Open': business.workingTime,
+                                                'OffersUntil': business.offersUntil,
+                                                'Tags': business.tags})
+
+    context_dict = {'business_form': business_form, 'current_offer':current_offer, 'business':business}
     return render(request, 'finder/adminPanel.html', context_dict)
+
+
+#ability to end an offer. To be added somewhere in the admin panel.
+def end_offer(end_offer_id):
+    offer = Offer.objects.get(id=end_offer_id)
+    users_with_reservation = list(UserAccount.objects.filter(reservation=offer))
+    for u in users_with_reservation:
+        u.reservation = None
+        u.save()
+    offer.delete()
 
 
 @login_required
