@@ -161,33 +161,37 @@ h2 {
 
 
 /*individual business page*/
+/*https://www.w3schools.com/howto/howto_css_images_side_by_side.asp*/
 
-.business-info {
-    overflow: auto;
+.image-column {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
+
+.image-row {
+    position: relative;
+    overflow: hidden;
     background-color: #e5e5e5;
 }
 
-.business-info img {
-    max-height: 500px;
-    max-width: 500px;
-    float: left;
+iframe {
+    position: absolute;
+    height: 100%;
+}
+
+.-image-row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.business-descr {
+    text-align: center;
+    margin-bottom: 50px;
 }
 
 .business-info btn {
     position: relative;
     margin: 40px;
-}
-
-
-#restaurant-map {
-    /*space for the footer */
-    clear: left;
-    margin-bottom: 50px;
-    }
-
-#restaurant-map iframe {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 40%;
 }
