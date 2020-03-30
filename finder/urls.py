@@ -15,7 +15,8 @@ urlpatterns = [
 	path("account/", views.account, name="account"),
 	path("myBusinesses/", views.myBusinesses, name="myBusinesses"),
     path("adminPanel/", views.adminPanel, name="adminPanel"),
+    path("adminPanel/<slug:business_name_slug>/", views.adminPanel, name="adminPanel"),
     path("find_food/", views.find_food, name="find_food"),
     path('find_food/<slug:business_name_slug>/', views.show_business, name='show_business'),
-    path("reserve/", views.reserve, name="reserve")
+    path("reserve/", views.reserve, name="reserve"),
 ]

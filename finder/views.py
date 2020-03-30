@@ -271,11 +271,38 @@ def account(request):
     return render(request, 'finder/account.html')
 
 
+# @login_required
+# @user_passes_test(isOwner)
+# def adminPanel(request):
+#     this_owner = OwnerAccount.objects.get(user=request.user)
+#     owner_businesses = list(Business.objects.filter(owner=this_owner))
+#
+#     if request.method == 'POST':
+#         business_form = BusinessForm(request.POST)
+#
+#         print(business_form)
+#
+#         if business_form.is_valid():
+#             business = business_form.save()
+#             return redirect('finder:myBusinesses')
+#
+#     else:
+#         business_form = BusinessForm()
+#
+#     context_dict = {'business_form': business_form}
+#     return render(request, 'finder/adminPanel.html', context_dict)
+
 @login_required
 @user_passes_test(isOwner)
-def adminPanel(request):
-    this_owner = OwnerAccount.objects.get(user=request.user)
-    owner_businesses = list(Business.objects.filter(owner=this_owner))
+def adminPanel(request, business_name_slug):
+    current_offer = None
+    business = None
+    business = Business.objects.filter(slug=business_name_slug)
+    if len(business) != 0:
+        business = business[0]
+        business_offer = Offer.objects.filter(business=business)
+        if len(business_offer) != 0:
+            current_offer = business_offer[0]
 
     if request.method == 'POST':
         business_form = BusinessForm(request.POST)
@@ -286,11 +313,25 @@ def adminPanel(request):
             business = business_form.save()
             return redirect('finder:myBusinesses')
 
+        end_offer_id = request.POST['end_offer_id']
+        if end_offer_id:
+            end_offer(end_offer_id)
+
     else:
         business_form = BusinessForm()
 
-    context_dict = {'business_form': business_form}
+    context_dict = {'business_form': business_form, 'current_offer':current_offer, 'business':business}
     return render(request, 'finder/adminPanel.html', context_dict)
+
+
+#ability to end an offer. To be added somewhere in the admin panel.
+def end_offer(end_offer_id):
+    offer = Offer.objects.get(id=end_offer_id)
+    users_with_reservation = list(UserAccount.objects.filter(reservation=offer))
+    for u in users_with_reservation:
+        u.reservation = None
+        u.save()
+    offer.delete()
 
 
 @login_required
