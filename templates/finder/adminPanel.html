@@ -6,6 +6,7 @@ Settings
 {% endblock %}
 
 {% block body_block %}
+    {% if business %}
     <div class="title"><h1>Settings</h1></div>
     <div>
       <form>
@@ -15,4 +16,23 @@ Settings
         <button type="submit" class="btn btn-primary">Save</button>
       </form>
     </div>
+
+{% if current_offer %}
+    <p>You have an offer running for this business. Click below to remove the reservation for all users and delete the offer.</p>
+    <form class="form-inline"
+            id="reserve"
+            method="post"
+            action="{% url 'finder:adminPanel' business.slug %}">
+
+            {% csrf_token %}
+
+            <button class="btn btn-primary"
+                type="submit"
+                id="end_offer_id"
+                name="end_offer_id"
+                value="{{ current_offer.id }}">End this offer</button>
+    </form>
+{% endif %}
+{% endif %}
+
 {% endblock %}

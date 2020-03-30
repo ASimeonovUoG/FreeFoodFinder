@@ -3,7 +3,7 @@
 
 {% block body_block %}
 {% if reserved_business %}
-    <h1 class="title">Sucess!</h1>
+    <h1 class="title">Success!</h1>
     <p>Thank you for your reservation! Please pick up your meal at {{ reserved_business }}, {{ reserved_business.address }} before {{reserved_business.offersUntil }} . </p>
 {% else %}
    <h1 class="title">Something went wrong</h1>
