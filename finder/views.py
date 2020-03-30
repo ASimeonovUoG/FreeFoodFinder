@@ -318,7 +318,13 @@ def adminPanel(request, business_name_slug):
             end_offer(end_offer_id)
 
     else:
-        business_form = BusinessForm()
+        #prepopulate the fields
+        business_form = BusinessForm(initial = {'BusinessName' : business.businessName,
+                                                'Address': business.address,
+                                                'Description': business.description,
+                                                'Open': business.workingTime,
+                                                'OffersUntil': business.offersUntil,
+                                                'Tags': business.tags})
 
     context_dict = {'business_form': business_form, 'current_offer':current_offer, 'business':business}
     return render(request, 'finder/adminPanel.html', context_dict)
