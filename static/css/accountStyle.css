@@ -44,6 +44,11 @@ ul ul:hover {
     height: 200px;  
 }
 
+p a {
+    color: blue;
+  }
+
+
 a {
     color: white;
 }
@@ -51,3 +56,5 @@ a {
 a:hover {
     color:orange;
 }
+
+
