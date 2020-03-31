@@ -191,7 +191,8 @@ iframe {
     margin-bottom: 50px;
 }
 
-.business-info btn {
+.business-descr button {
     position: relative;
-    margin: 40px;
+    margin-left: auto;
+    margin-right: auto;
 }
