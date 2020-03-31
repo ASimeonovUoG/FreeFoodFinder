@@ -11,12 +11,6 @@ Log In
             alt="Free Food Finder"></a>
 </div>
 
-{% if registered %}
-<h1>Thank you for registering.
-    Log in <a href="{% url 'finder:user_login' %}">here.</a>
-</h1>
-{% else %}
-<h1>Log In here:</h1>
 
 {% if login_form.errors %}
 {% for field in login_form %}
@@ -33,11 +27,32 @@ Log In
 {% endfor %}
 {% endif %}
 
-<form id="login_form" method="post" action="{% url 'finder:user_login' %}" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ login_form.as_p }}
-    <input type="submit" name="submit" value="Log In" />
-</form>
-{% endif %}
+
+
+<div class="container">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+            <h1 class="card-title text-center">Sign In</h1>
+              <form id="login_form" method="post" action="{% url 'finder:user_login' %}" enctype="multipart/form-data" class="form-signin">
+                {% csrf_token %}
+                <!--{{ login_form.as_p }} -->
+                {% for field in login_form %}
+                <div class="form-label-group">
+                {{ field }}
+                <label for="input{{ field.name }}">{{ field.label }}</label>
+                </div>
+                {% endfor %}
+                <hr class="my-4">
+                <input class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" name="submit" value="Log In" />
+            </form>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <link type="text/css" rel="stylesheet" href="{% static 'css/userLogIn.css' %}">
 
 {% endblock %}
