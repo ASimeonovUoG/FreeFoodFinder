@@ -3,12 +3,12 @@
 
 
 {% block title_block %}
-Settings
+Admin Panel
 {% endblock %}
 
 {% block body_block %}
     {% if business %}
-    <div class="title"><h1>Settings</h1></div>
+    <div class="title"><h1>Business Information</h1></div>
     <div>
       <form method="post", action="{% url 'finder:adminPanel' business.slug %}" enctype="multipart/form-data">
         <div class="form-group">

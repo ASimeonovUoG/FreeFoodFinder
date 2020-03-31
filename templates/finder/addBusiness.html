@@ -1,0 +1,17 @@
+{% extends 'finder/sidebar_base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+Add Business
+{% endblock %}
+
+{% block body_block %}
+    <div class="title"><h1>Create a new Business</h1></div>
+    <div>
+        <form method ="post">
+          {% csrf_token %}
+          {{ new_business_form.as_p }}
+          <button type="submit">Create</button>  </button>
+        </form>
+    </div>
+{% endblock %}

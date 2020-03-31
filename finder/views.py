@@ -341,6 +341,22 @@ def end_offer(end_offer_id):
     offer.delete()
 
 @login_required
+@user_passes_test(isOwner)
+def add_business(request):
+    new_business_form = BusinessForm()
+
+    if request.method == 'POST':
+        new_business_form = BusinessForm(request.POST)
+
+        if new_business_form.is_valid():
+            new_business_form.save(commit=True)
+            return redirect('/finder/')
+        else:
+            print(new_business_form.errors)
+    context_dict = {'new_business_form' : new_business_form}
+    return render(request, 'finder/addBusiness.html',context_dict)
+
+@login_required
 def settings(request):
     if request.method == 'POST':
         password_form = PasswordChangeForm(data=request.POST,
