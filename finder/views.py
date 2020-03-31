@@ -9,7 +9,7 @@ from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm,
 
 from django.contrib.auth.decorators import user_passes_test, login_required
 from finder.decorators import isOwner
-from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
+from django.contrib.auth.forms import UserChangeForm, SetPasswordForm
 from django.contrib.auth import update_session_auth_hash
 
 # Create your views here.
@@ -347,11 +347,9 @@ def add_business(request):
 @login_required
 def settings(request):
     if request.method == 'POST':
-        password_form = PasswordChangeForm(data=request.POST,
-                                           user=request.user)
+        password_form = SetPasswordForm(data=request.POST,
+                                        user=request.user)
         email_form = Update_form(request.POST, instance=request.user)
-
-        #print(password_form)
 
         if password_form.is_valid() and email_form.is_valid():
             user = password_form.save()
@@ -360,7 +358,7 @@ def settings(request):
             return redirect('finder:account')
 
     else:
-        password_form = PasswordChangeForm(user=request.user)
+        password_form = SetPasswordForm(user=request.user)
         email_form = Update_form(instance=request.user)
 
     #affects rendering of the side bar
