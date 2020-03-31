@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 from finder.models import Business, Offer, OwnerAccount, UserAccount
 
-from finder.distance import calculate_distance, read_google_key
+from finder.distance import calculate_distance, read_google_key, validate_address
 from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm, Update_form, OfferForm
 
 from django.contrib.auth.decorators import user_passes_test, login_required
@@ -45,115 +45,92 @@ def reserve(request):
                     reserved_business = None
             return render(request, 'finder/reserve.html',
                       {"reserved_business": reserved_business})
-    return render(request, 'finder/reserve.html', {})
+        else:
+            return redirect(reverse('finder:user_login'))
+    #this site should only be accessed following a POST request
+    else:
+        return redirect(reverse('finder:home'))
 
 
 def home(request):
-    distance_threshold = 10
     FEATURED_THRESHOLD = 50
-    offers = []
     invalid = False
-    no_results = False
-    # note that everything in this if-clause also appears in find_food. It would be possible to first validate the input and then either display an
-    # error message on home.html or call find_food(). However if the input is valid that would require two calls to the maps API (one to validate
-    # the input, one to calculate the distance). Calls to the maps API are expensive (as in, they charge money for great amounts of calls). So it
-    # makes sense to limit the amount of calls to this API. Of course it would also be possible to just load the find_food template either way
-    # and display the error message there, but that can be confusing.
+
     if request.method == 'POST':
         query = request.POST['query'].strip()
 
         if query:
-            businesses = Business.objects.all()
-            for b in businesses:
-                try:
-                    if calculate_distance(b.lat, b.long,
-                                          query) < distance_threshold:
-                        offer = Offer.objects.filter(business=b)
-                        # appends the offer because offers are associated with businesses. And a business should only appear
-                        # in the search results if it has an offer
-                        if len(offer) > 0:
-                            offers.append(offer[0])
-                # calculate_distance raises ValueError if it can't parse the data
-                except ValueError:
-                    invalid = True
-                    offers = []
-                    break
-
-            if not invalid:
-                # if the input is valid but there are no close offers, generate the list of featured offers instead, to send to find_food
-                if len(offers) == 0:
-                    no_results = True
-                    all_offers = Offer.objects.all()
-                    for o in all_offers:
-                        if o.portionAmount > FEATURED_THRESHOLD:
-                            offers.append(o)
-
-                return render(request, 'finder/find_food.html', {
-                    'invalid': invalid,
-                    'no_results': no_results,
-                    'offers': offers
-                })
-
-    featured_offers = []
-    offers = Offer.objects.all()
-    for o in offers:
-        if o.portionAmount > FEATURED_THRESHOLD:
-            featured_offers.append(o)
+            return render_list_of_offers(request, query)
+    else:
+        featured_offers = []
+        offers = Offer.objects.all()
+        for o in offers:
+            if o.portionAmount > FEATURED_THRESHOLD:
+                featured_offers.append(o)
 
     return render(request, 'finder/home.html', {
-        'invalid': invalid,
-        'featured_offers': featured_offers
-    })
+            'invalid': invalid,
+            'featured_offers': featured_offers
+        })
 
 
 def find_food(request):
-    FEATURED_THRESHOLD = 50
     distance_threshold = 10
-    offers = []
-    invalid = False
-    no_results = False
+
     if request.method == 'POST':
         query = request.POST['query'].strip()
         radius = request.POST['radius'].strip()
         if radius:
             distance_threshold = int(radius)
-
         if query:
-            businesses = Business.objects.all()
-            for b in businesses:
-                try:
-                    if calculate_distance(b.lat, b.long,
-                                          query) < distance_threshold:
-                        offer = Offer.objects.filter(business=b)
+            return render_list_of_offers(request, query, distance_threshold)
 
-                        if len(offer) > 0:
-                            offers.append(offer[0])
-
-                except ValueError:
-                    invalid = True
-                    offers = []
-                    break
-            if not invalid:
-
-                if len(offers) == 0:
-                    no_results = True
-                    all_offers = Offer.objects.all()
-                    for o in all_offers:
-                        if o.portionAmount > FEATURED_THRESHOLD:
-                            offers.append(o)
-
-            return render(request, 'finder/find_food.html', {
-                'invalid': invalid,
-                'no_results': no_results,
-                'offers': offers
-            })
     else:
         return render(request, 'finder/find_food.html', {})
 
 
+#helper function for home and find_food. Generates a list of offers close to query,
+#or a list of featured offers if there are no close offers, and returns the appropriate
+#HTTPResponse object
+def render_list_of_offers(request, query, distance_threshold=10):
+    offers = []
+    FEATURED_THRESHOLD = 50
+    invalid = False
+    no_results = False
+    businesses = Business.objects.all()
+    for b in businesses:
+        try:
+            if calculate_distance(b.lat, b.long,
+                                  query) < distance_threshold:
+                offer = Offer.objects.filter(business=b)
+                # appends the offer because offers are associated with businesses. And a business should only appear
+                # in the search results if it has an offer
+                if len(offer) > 0:
+                    offers.append(offer[0])
+        # calculate_distance raises ValueError if it can't parse the data
+        except ValueError:
+            invalid = True
+            offers = []
+            break
+
+    if not invalid:
+        # if the input is valid but there are no close offers, generate the list of featured offers instead, to send to find_food
+        if len(offers) == 0:
+            no_results = True
+            all_offers = Offer.objects.all()
+            for o in all_offers:
+                if o.portionAmount > FEATURED_THRESHOLD:
+                    offers.append(o)
+
+        return render(request, 'finder/find_food.html', {
+            'invalid': invalid,
+            'no_results': no_results,
+            'offers': offers
+        })
+
+
 def show_business(request, business_name_slug):
     context_dict = {}
-
     try:
         business = Business.objects.get(slug=business_name_slug)
         context_dict['business'] = business
@@ -165,7 +142,6 @@ def show_business(request, business_name_slug):
             context_dict['offer'] = offer[0]
 
     except Business.DoesNotExist:
-
         context_dict['business'] = None
 
     return render(request, 'finder/individualBusiness.html', context_dict)
@@ -279,7 +255,6 @@ def adminPanel(request, business_name_slug):
     current_offer = None
     business = get_object_or_404(Business, slug = business_name_slug)
 
-
     #if an owner types in the business name slug of a business that they do not own
     #they can still access its admin panel because the decorator only checks if the
     #user is an owner. This is a simple way of preventing that.
@@ -339,6 +314,7 @@ def adminPanel(request, business_name_slug):
     context_dict = {'business_form': business_form, 'add_offer_form': add_offer_form, 'current_offer':current_offer, 'business':business, 'is_owner': True,
         }
     return render(request, 'finder/adminPanel.html', context_dict)
+
 
 #helper function for adminPanel
 def end_offer(end_offer_id):
