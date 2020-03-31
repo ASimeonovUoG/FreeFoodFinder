@@ -9,7 +9,7 @@ Settings
     {% if business %}
     <div class="title"><h1>Settings</h1></div>
     <div>
-      <form>
+      <form method="post", action="{% url 'finder:adminPanel' business.slug %}" enctype="multipart/form-data">
         <div class="form-group">
           {% csrf_token %}
           {{ business_form.as_p}}
@@ -22,7 +22,8 @@ Settings
     <form class="form-inline"
             id="reserve"
             method="post"
-            action="{% url 'finder:adminPanel' business.slug %}">
+            action="{% url 'finder:adminPanel' business.slug %}"
+            >
 
             {% csrf_token %}
 
@@ -32,6 +33,9 @@ Settings
                 name="end_offer_id"
                 value="{{ current_offer.id }}">End this offer</button>
     </form>
+{% else %}
+    <p>You have no offer running at the moment. Do you want to add one?</p>
+    <a class="btn btn-primary" href="{% url 'finder:add_offer' business.slug %}" role="button" target="_blank">Add an offer</a>
 {% endif %}
 {% endif %}
 

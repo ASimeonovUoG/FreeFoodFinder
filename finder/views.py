@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.urls import reverse
 from finder.models import Business, Offer, OwnerAccount, UserAccount
 
 from finder.distance import calculate_distance, read_google_key
-from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm, Update_form
+from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm, Update_form, OfferForm
 
 from django.contrib.auth.decorators import user_passes_test, login_required
 from finder.decorators import isOwner
@@ -271,43 +271,26 @@ def account(request):
     return render(request, 'finder/account.html')
 
 
-# @login_required
-# @user_passes_test(isOwner)
-# def adminPanel(request):
-#     this_owner = OwnerAccount.objects.get(user=request.user)
-#     owner_businesses = list(Business.objects.filter(owner=this_owner))
-#
-#     if request.method == 'POST':
-#         business_form = BusinessForm(request.POST)
-#
-#         print(business_form)
-#
-#         if business_form.is_valid():
-#             business = business_form.save()
-#             return redirect('finder:myBusinesses')
-#
-#     else:
-#         business_form = BusinessForm()
-#
-#     context_dict = {'business_form': business_form}
-#     return render(request, 'finder/adminPanel.html', context_dict)
-
 @login_required
 @user_passes_test(isOwner)
 def adminPanel(request, business_name_slug):
     current_offer = None
     business = None
-    business = Business.objects.filter(slug=business_name_slug)
-    if len(business) != 0:
-        business = business[0]
-        business_offer = Offer.objects.filter(business=business)
-        if len(business_offer) != 0:
-            current_offer = business_offer[0]
+    business = get_object_or_404(Business, slug = business_name_slug)
+
+    #if an owner types in the business name slug of a business that they do not own
+    #they can still access its admin panel because the decorator only checks if the
+    #user is an owner. This is a simple way of preventing that.
+    if business.owner != get_object_or_404(OwnerAccount, user=request.user):
+        return HttpResponse("You do not have permission to view this site.")
+
+    business_offer = Offer.objects.filter(business=business)
+    if len(business_offer) != 0:
+        current_offer = business_offer[0]
 
     if request.method == 'POST':
-        business_form = BusinessForm(request.POST)
-
-        print(business_form)
+        #need request.FILES so that the user can upload a new picture
+        business_form = BusinessForm(request.POST, request.FILES, instance=business)
 
         if business_form.is_valid():
             business = business_form.save()
@@ -319,12 +302,13 @@ def adminPanel(request, business_name_slug):
 
     else:
         #prepopulate the fields
-        business_form = BusinessForm(initial = {'BusinessName' : business.businessName,
-                                                'Address': business.address,
-                                                'Description': business.description,
-                                                'Open': business.workingTime,
-                                                'OffersUntil': business.offersUntil,
-                                                'Tags': business.tags})
+        business_form = BusinessForm(data = {'businessName' : business.businessName,
+                                             'address': business.address,
+                                             'description': business.description,
+                                             'workingTime': business.workingTime,
+                                             'offersUntil': business.offersUntil,
+                                             'tags': business.tags,
+                                             'picture': business.picture})
 
     context_dict = {'business_form': business_form, 'current_offer':current_offer, 'business':business}
     return render(request, 'finder/adminPanel.html', context_dict)
@@ -339,6 +323,21 @@ def end_offer(end_offer_id):
         u.save()
     offer.delete()
 
+def add_offer(request, business_name_slug):
+    #test this
+    if request.method == 'POST':
+        offer_form = OfferForm(request.POST)
+
+        if offer_form.is_valid():
+            offer = offer_form
+            business = Business.objects.get(slug=business_name_slug)
+            offer.business = business
+            return redirect('finder:myBusinesses')
+
+    else:
+        #prepopulate the fields
+        offer_form = OfferForm()
+        return render(request, 'finder/add_offer', {'offer_form': offer_form})
 
 @login_required
 def settings(request):
