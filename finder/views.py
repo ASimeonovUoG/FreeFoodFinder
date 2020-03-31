@@ -355,12 +355,15 @@ def add_business(request):
         new_business_form = BusinessForm(request.POST)
 
         if new_business_form.is_valid():
-            new_business_form.save(commit=True)
+            business = new_business_form.save(commit=False)
+            business.owner = OwnerAccount.objects.get(user=request.user)
+            business.save()
             return redirect('/finder/')
         else:
             print(new_business_form.errors)
     context_dict = {'new_business_form' : new_business_form}
     return render(request, 'finder/addBusiness.html',context_dict)
+
 
 @login_required
 def settings(request):
