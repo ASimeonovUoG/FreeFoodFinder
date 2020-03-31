@@ -38,7 +38,7 @@ Settings
 
 {% else %}
     <p>You have no offer running at the moment. Do you want to add one?</p>
-    <button class="btn btn-primary">Add an offer</button>
+    <button class="btn btn-primary" id="add_offer">Add an offer</button>
 
       <form method="post"
             action="{% url 'finder:adminPanel' business.slug %}"
