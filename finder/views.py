@@ -277,8 +277,9 @@ def account(request):
 @user_passes_test(isOwner)
 def adminPanel(request, business_name_slug):
     current_offer = None
-    business = None
+    form_errors = False
     business = get_object_or_404(Business, slug = business_name_slug)
+
 
     #if an owner types in the business name slug of a business that they do not own
     #they can still access its admin panel because the decorator only checks if the
@@ -301,6 +302,8 @@ def adminPanel(request, business_name_slug):
                 business.owner = get_object_or_404(OwnerAccount, user=request.user)
                 business.save()
                 return redirect('finder:myBusinesses')
+            else:
+                form_errors = True
 
         #ending an offer
         elif "end_offer" in request.POST:
@@ -330,7 +333,8 @@ def adminPanel(request, business_name_slug):
 
     add_offer_form = OfferForm()
 
-    context_dict = {'business_form': business_form, 'add_offer_form': add_offer_form, 'current_offer':current_offer, 'business':business, 'is_owner': True}
+    context_dict = {'business_form': business_form, 'add_offer_form': add_offer_form, 'current_offer':current_offer, 'business':business, 'is_owner': True,
+                    'form_errors':form_errors}
     return render(request, 'finder/adminPanel.html', context_dict)
 
 #helper function for adminPanel

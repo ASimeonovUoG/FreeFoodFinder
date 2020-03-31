@@ -1,5 +1,6 @@
 import googlemaps
 from math import radians, sin, cos, acos
+from django.core.exceptions import ValidationError
 
 def read_google_key():
     google_api_key = None
@@ -26,6 +27,12 @@ def get_coords(address):
         return lat, long
     except:
         raise ValueError("invalid input")
+
+
+def validate_address(address):
+    gmaps = googlemaps.Client(key=read_google_key())
+    if gmaps.geocode(address) == []:
+        raise ValidationError("invalid address")
 
 #calculates the distance between a set of coordinates (the coordinates of the business, stored in the database) and
 #another location

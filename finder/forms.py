@@ -2,7 +2,7 @@ from django import forms
 from finder.models import UserAccount, OwnerAccount, Business, Offer
 from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.forms import UserChangeForm
-
+from finder.distance import validate_address
 User = get_user_model()
 
 
@@ -79,7 +79,7 @@ class Update_form(UserChangeForm):
 
 class BusinessForm(forms.ModelForm):
     businessName = forms.CharField(required=False, label="Business name")
-    address = forms.CharField(required=False, label="Address")
+    address = forms.CharField(required=False, label="Address", validators=[validate_address])
     description = forms.CharField(required=False, label="Description")
     workingTime = forms.CharField(required=False, label="Opening hours")
     offersUntil = forms.TimeField(required=False, label="Offers until")

@@ -24,7 +24,7 @@ class OwnerAccount(models.Model):
 class Business(models.Model):
     owner = models.ForeignKey(OwnerAccount, on_delete=models.CASCADE)
     businessName = models.CharField(max_length=128)
-    address = models.CharField(max_length=256)
+    address = models.CharField(max_length=256, validators=[distance.validate_address])
     description = models.CharField(max_length=1024)
     workingTime = models.CharField(max_length=128)
     offersUntil = models.TimeField()
