@@ -19,4 +19,5 @@ urlpatterns = [
     path("find_food/", views.find_food, name="find_food"),
     path('find_food/<slug:business_name_slug>/', views.show_business, name='show_business'),
     path("reserve/", views.reserve, name="reserve"),
+    path("addBusiness/", views.add_business, name="addBusiness"),
 ]

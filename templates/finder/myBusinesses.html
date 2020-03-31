@@ -18,6 +18,8 @@ My Businesses
           <h3>{{ business.businessName }}</h3>
           {{ business.description }}
         </div>
+        <h3>Add a new Business</h3>
+        <a href = "{% url 'finder:addBusiness' %}"><img src="{% static 'images/add_sign.png' %}" alt="Add a Business"></a>
       </div>
       {% endfor %}
       {% endif %}
