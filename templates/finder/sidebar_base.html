@@ -35,8 +35,10 @@
     <div id = "sidebar">
       <ul>
           <ul><a href = "{% url 'finder:settings' %}">Account Settings</a></ul>
+          {% if is_owner %}
           <ul><a href = "{% url 'finder:myBusinesses' %}">My Businesses</a></ul>
           <ul><a href = "{% url 'finder:support' %}">Support</a></ul>
+          {% endif %}
       </ul>
   </div>
   

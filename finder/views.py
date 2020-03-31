@@ -254,7 +254,7 @@ def user_logout(request):
 @login_required
 @user_passes_test(isOwner)
 def support(request):
-    return render(request, 'finder/support.html')
+    return render(request, 'finder/support.html', {'is_owner': True})
 
 
 @login_required
@@ -263,12 +263,14 @@ def myBusinesses(request):
     this_owner = OwnerAccount.objects.get(user=request.user)
     owner_businesses = list(Business.objects.filter(owner=this_owner))
     return render(request, 'finder/myBusinesses.html',
-                  {'user_businesses': owner_businesses})
+                  {'user_businesses': owner_businesses, 'is_owner': True})
 
 
 @login_required
 def account(request):
-    return render(request, 'finder/account.html')
+    #affects rendering of the side bar
+    is_owner = OwnerAccount.objects.filter(user=request.user).exists()
+    return render(request, 'finder/account.html', {'is_owner': is_owner})
 
 
 @login_required
@@ -328,7 +330,7 @@ def adminPanel(request, business_name_slug):
 
     add_offer_form = OfferForm()
 
-    context_dict = {'business_form': business_form, 'add_offer_form': add_offer_form, 'current_offer':current_offer, 'business':business}
+    context_dict = {'business_form': business_form, 'add_offer_form': add_offer_form, 'current_offer':current_offer, 'business':business, 'is_owner': True}
     return render(request, 'finder/adminPanel.html', context_dict)
 
 #helper function for adminPanel
@@ -359,5 +361,7 @@ def settings(request):
         password_form = PasswordChangeForm(user=request.user)
         email_form = Update_form(instance=request.user)
 
-    context_dict = {'password_form': password_form, 'email_form': email_form}
+    #affects rendering of the side bar
+    is_owner = OwnerAccount.objects.filter(user=request.user).exists()
+    context_dict = {'password_form': password_form, 'email_form': email_form, 'is_owner': is_owner}
     return render(request, 'finder/settings.html', context_dict)
