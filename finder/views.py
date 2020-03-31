@@ -277,7 +277,6 @@ def account(request):
 @user_passes_test(isOwner)
 def adminPanel(request, business_name_slug):
     current_offer = None
-    form_errors = False
     business = get_object_or_404(Business, slug = business_name_slug)
 
 
@@ -303,7 +302,11 @@ def adminPanel(request, business_name_slug):
                 business.save()
                 return redirect('finder:myBusinesses')
             else:
-                form_errors = True
+                #render the entire page again, but with the same form, so the errors are displayed
+                add_offer_form = OfferForm()
+                context_dict = {'business_form': business_form, 'add_offer_form': add_offer_form,
+                                'current_offer': current_offer, 'business': business, 'is_owner': True}
+                return render(request, 'finder/adminPanel.html', context_dict)
 
         #ending an offer
         elif "end_offer" in request.POST:
@@ -334,7 +337,7 @@ def adminPanel(request, business_name_slug):
     add_offer_form = OfferForm()
 
     context_dict = {'business_form': business_form, 'add_offer_form': add_offer_form, 'current_offer':current_offer, 'business':business, 'is_owner': True,
-                    'form_errors':form_errors}
+        }
     return render(request, 'finder/adminPanel.html', context_dict)
 
 #helper function for adminPanel

@@ -10,15 +10,27 @@ Admin Panel
     {% if business %}
     <div class="title"><h1>Business Information</h1></div>
 
-    {% if form_errors %}
-    Invalid input. Please try again.
-    {% endif %}
 
     <div>
       <form method="post" action="{% url 'finder:adminPanel' business.slug %}" enctype="multipart/form-data">
         <div class="form-group">
           {% csrf_token %}
-          {{ business_form.as_p}}
+
+           {% for field in business_form %}
+
+            <p>{{ field.label_tag }} {{ field }}
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                    <div class="form_error">
+                        {{ error|escape }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            </p>
+            {% endfor %}
+
+
+
         <button type="submit" class="btn btn-primary" name="submit_form">Save</button>
         </div>
       </form>
@@ -29,8 +41,7 @@ Admin Panel
     <form class="form-inline"
             id="reserve"
             method="post"
-            action="{% url 'finder:adminPanel' business.slug %}"
-            >
+            action="{% url 'finder:adminPanel' business.slug %}">
 
             {% csrf_token %}
 
