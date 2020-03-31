@@ -78,13 +78,13 @@ class Update_form(UserChangeForm):
 
 
 class BusinessForm(forms.ModelForm):
-    businessName = forms.CharField(required=False)
-    address = forms.CharField(required=False)
-    description = forms.CharField(required=False)
-    workingTime = forms.CharField(required=False)
-    offersUntil = forms.TimeField(required=False)
-    tags = forms.CharField(required=False)
-    picture = forms.ImageField(required=False)
+    businessName = forms.CharField(required=False, label="Business name")
+    address = forms.CharField(required=False, label="Address")
+    description = forms.CharField(required=False, label="Description")
+    workingTime = forms.CharField(required=False, label="Opening hours")
+    offersUntil = forms.TimeField(required=False, label="Offers until")
+    tags = forms.CharField(required=False, label="Keywords")
+    picture = forms.ImageField(required=False, label="Picture")
 
     class Meta:
         model = Business
@@ -93,7 +93,7 @@ class BusinessForm(forms.ModelForm):
 
 
 class OfferForm(forms.ModelForm):
-    portionAmount = forms.IntegerField()
+    portionAmount = forms.IntegerField(label="Portion amount")
 
     class Meta:
         model = Offer
