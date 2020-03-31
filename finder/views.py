@@ -289,20 +289,36 @@ def adminPanel(request, business_name_slug):
         current_offer = business_offer[0]
 
     if request.method == 'POST':
-        #need request.FILES so that the user can upload a new picture
-        business_form = BusinessForm(request.POST, request.FILES, instance=business)
+        #check if the button with name "submit_form" was clicked
+        if "submit_form" in request.POST:
+            #need request.FILES so that the user can upload a new picture
+            business_form = BusinessForm(request.POST, request.FILES, instance=business)
 
-        if business_form.is_valid():
-            business = business_form.save()
+            if business_form.is_valid():
+                business = business_form.save(commit=False)
+                business.owner = get_object_or_404(OwnerAccount, user=request.user)
+                business.save()
+                return redirect('finder:myBusinesses')
+
+        #ending an offer
+        elif "end_offer" in request.POST:
+            end_offer_id = request.POST['end_offer'].strip()
+            if end_offer_id:
+                end_offer(end_offer_id)
             return redirect('finder:myBusinesses')
 
-        end_offer_id = request.POST['end_offer_id']
-        if end_offer_id:
-            end_offer(end_offer_id)
+        #adding an offer
+        elif "add_offer" in request.POST:
+            add_offer_form = OfferForm(request.POST)
+            if add_offer_form.is_valid():
+                offer = add_offer_form.save(commit=False)
+                offer.business = business
+                offer.save()
+                return redirect('finder:myBusinesses')
 
-    else:
-        #prepopulate the fields
-        business_form = BusinessForm(data = {'businessName' : business.businessName,
+
+    #prepopulate the fields
+    business_form = BusinessForm(data = {'businessName' : business.businessName,
                                              'address': business.address,
                                              'description': business.description,
                                              'workingTime': business.workingTime,
@@ -310,11 +326,12 @@ def adminPanel(request, business_name_slug):
                                              'tags': business.tags,
                                              'picture': business.picture})
 
-    context_dict = {'business_form': business_form, 'current_offer':current_offer, 'business':business}
+    add_offer_form = OfferForm()
+
+    context_dict = {'business_form': business_form, 'add_offer_form': add_offer_form, 'current_offer':current_offer, 'business':business}
     return render(request, 'finder/adminPanel.html', context_dict)
 
-
-#ability to end an offer. To be added somewhere in the admin panel.
+#helper function for adminPanel
 def end_offer(end_offer_id):
     offer = Offer.objects.get(id=end_offer_id)
     users_with_reservation = list(UserAccount.objects.filter(reservation=offer))
@@ -322,22 +339,6 @@ def end_offer(end_offer_id):
         u.reservation = None
         u.save()
     offer.delete()
-
-def add_offer(request, business_name_slug):
-    #test this
-    if request.method == 'POST':
-        offer_form = OfferForm(request.POST)
-
-        if offer_form.is_valid():
-            offer = offer_form
-            business = Business.objects.get(slug=business_name_slug)
-            offer.business = business
-            return redirect('finder:myBusinesses')
-
-    else:
-        #prepopulate the fields
-        offer_form = OfferForm()
-        return render(request, 'finder/add_offer', {'offer_form': offer_form})
 
 @login_required
 def settings(request):
