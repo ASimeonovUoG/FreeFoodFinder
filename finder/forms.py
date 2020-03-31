@@ -1,7 +1,8 @@
 from django import forms
-from finder.models import UserAccount, OwnerAccount, Business
+from finder.models import UserAccount, OwnerAccount, Business, Offer
 from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.forms import UserChangeForm
+
 User = get_user_model()
 
 
@@ -77,14 +78,23 @@ class Update_form(UserChangeForm):
 
 
 class BusinessForm(forms.ModelForm):
-    BusinessName = forms.CharField()
-    Address = forms.CharField()
-    Description = forms.CharField()
-    Open = forms.CharField()
-    OffersUntil = forms.TimeField()
-    Tags = forms.CharField()
+    businessName = forms.CharField(required=False)
+    address = forms.CharField(required=False)
+    description = forms.CharField(required=False)
+    workingTime = forms.CharField(required=False)
+    offersUntil = forms.TimeField(required=False)
+    tags = forms.CharField(required=False)
+    picture = forms.ImageField(required=False)
 
     class Meta:
         model = Business
-        fields = ('BusinessName', 'Address', 'Description', 'Open',
-                  'OffersUntil', 'Tags')
+        fields = ('businessName', 'address', 'description', 'workingTime',
+                  'offersUntil', 'tags', 'picture')
+
+
+class OfferForm(forms.ModelForm):
+    portionAmount = forms.IntegerField()
+
+    class Meta:
+        model = Offer
+        fields = ('portionAmount',)
