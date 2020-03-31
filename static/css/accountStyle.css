@@ -44,6 +44,7 @@ ul ul:hover {
     height: 200px;  
 }
 
+
 p a {
     color: blue;
   }
@@ -57,4 +58,6 @@ a:hover {
     color:orange;
 }
 
-
+.form_error {
+    color: red;
+}

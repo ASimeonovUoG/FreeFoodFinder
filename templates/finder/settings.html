@@ -14,10 +14,19 @@ Settings
         </p>
         <form method ="post">
           {% csrf_token %}
-          {{ email_form.as_p }}
-          {{ password_form.as_p }}
-          <button type="submit">Save Changes</button>  </button>
+           {{ email_form.as_p }}
+
+           {% for field in password_form %}
+               <p>
+                   {% for error in field.errors %}
+                    <div class="form_error">
+                        {{ error|escape }}
+                    </div>
+                    {% endfor %}
+                {{ field.label_tag }} {{ field }}</p>
+            {% endfor %}
+            
+        <button type="submit" class="btn btn-primary" name="submit_form">Save changes</button>
         </form>
     </div>
-    <img src="{% static 'images/logo.png' %}" alt="Free Food Finder"></a>
 {% endblock %}

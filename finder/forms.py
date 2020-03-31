@@ -73,6 +73,8 @@ class UserLoginForm(forms.ModelForm):
 
 
 class Update_form(UserChangeForm):
+    #only show the email
+    password = None
     class Meta:
         model = User
         fields = ('email', )
