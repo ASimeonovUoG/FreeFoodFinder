@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 from finder.models import Business, Offer, OwnerAccount, UserAccount
 
-from finder.distance import calculate_distance, read_google_key, validate_address
+from finder.distance import calculate_distance, read_google_key
 from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm, Update_form, OfferForm
 
 from django.contrib.auth.decorators import user_passes_test, login_required
