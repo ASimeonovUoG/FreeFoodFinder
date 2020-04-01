@@ -16,25 +16,25 @@ def populate():
             'email': "trevi_italian@gmail.com",
             'first_name': "Antonio",
             'last_name': "Trevi",
-            'password': "Password123"
+            'password': "JC2+/Y_8Z:gP+y@."
         },
         {
             'email': "alberta.stevenson@googlemail.com",
             'first_name': "Alberta",
             'last_name': "Stevenson",
-            'password': "123Password"
+            'password': "M8N2yK$j\D@`f#G?"
         },
         {
             'email': "flora.smith@outlook.com",
             'first_name': "Flora",
             'last_name': "Smith",
-            'password': "MyPassword123"
+            'password': "VkrgMYN9QR,'?f!v"
         },
         {
             'email': "jonanthan.harding@gmail.com",
             'first_name': "Jonathan",
             'last_name': "Harding",
-            'password': "MyPassword289"
+            'password': "SqEYs}as?tqq\D3%"
         },
     ]
 
@@ -120,25 +120,25 @@ def populate():
 
     users = [{
             'email': "jack.frost@outlook.org",
-            'password': "1234password",
+            'password': "TX+8A-&_:GVaF+@Q",
             'reservation' : Offer.objects.get(business = Business.objects.get(businessName = "Bath Street Burgers"))
         },
         {
             'email': "jude.quinn@gmail.com",
-            'password': "password99"
+            'password': ">6<XhYfyL?W<e<Rs"
         },
         {
             'email' : "mary.louise@gmail.com",
-            'password': "432password",
+            'password': "H+q2}U_,V{Xx6eMY",
             'reservation': Offer.objects.get(business =  Business.objects.get(businessName = "West End Bakery"))
         },
         {
             'email': "don.lewis@gmx.de",
-            'password': "password987"
+            'password': "%Ej3-EW&qWA]L+b?"
         },
         {
             'email': "kerry.johnstone@googlemail.com",
-            'password': "mypassword123"
+            'password': "Z9]%q<Vkv_%wP-u;"
         }
         ]
 
