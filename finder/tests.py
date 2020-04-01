@@ -219,6 +219,4 @@ class BusinessFormTests(TestCase):
             "picture" : "trevi-italian.jpg"
         })
         self.assertFalse(business_form.is_valid())
-        self.assertEqual(business_form.errors, {
-            {'offersUntil': ['Enter a valid time.']}
-        })
+        self.assertEqual(business_form.errors, {'offersUntil': ['Enter a valid time.']})

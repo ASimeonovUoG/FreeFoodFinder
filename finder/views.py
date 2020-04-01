@@ -3,8 +3,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.urls import reverse
 from finder.models import Business, Offer, OwnerAccount, UserAccount
+from django.core.exceptions import ValidationError
 
-from finder.distance import calculate_distance, read_google_key
+from finder.distance import calculate_distance, read_google_key, validate_address
 from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm, Update_form, OfferForm
 
 from django.contrib.auth.decorators import user_passes_test, login_required
@@ -55,22 +56,24 @@ def reserve(request):
 
 def home(request):
     FEATURED_THRESHOLD = 50
-    invalid = False
-
     if request.method == 'POST':
         query = request.POST['query'].strip()
 
         if query:
-            return render_list_of_offers(request, query)
-    else:
-        featured_offers = []
-        offers = Offer.objects.all()
-        for o in offers:
-            if o.portionAmount > FEATURED_THRESHOLD:
-                featured_offers.append(o)
+            try:
+                validate_address(query)
+                return render_list_of_offers(request, query)
+            except ValidationError:
+                featured_offers = generate_featured_offers()
+                return render(request, 'finder/home.html', {
+                    'invalid': True,
+                    'featured_offers': featured_offers
+                })
 
-    return render(request, 'finder/home.html', {
-        'invalid': invalid,
+    else:
+        featured_offers = generate_featured_offers()
+        return render(request, 'finder/home.html', {
+        'invalid': False,
         'featured_offers': featured_offers
     })
 
@@ -89,6 +92,15 @@ def find_food(request):
     else:
         return render(request, 'finder/find_food.html', {})
 
+#helper function for home and find_food
+def generate_featured_offers():
+    FEATURED_THRESHOLD = 50
+    featured_offers = []
+    offers = Offer.objects.all()
+    for o in offers:
+        if o.portionAmount > FEATURED_THRESHOLD:
+            featured_offers.append(o)
+    return featured_offers
 
 #helper function for home and find_food. Generates a list of offers close to query,
 #or a list of featured offers if there are no close offers, and returns the appropriate
@@ -122,11 +134,12 @@ def render_list_of_offers(request, query, distance_threshold=10):
                 if o.portionAmount > FEATURED_THRESHOLD:
                     offers.append(o)
 
-        return render(request, 'finder/find_food.html', {
+    return render(request, 'finder/find_food.html', {
             'invalid': invalid,
             'no_results': no_results,
             'offers': offers
         })
+
 
 
 def show_business(request, business_name_slug):
