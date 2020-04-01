@@ -29,7 +29,8 @@ class Business(models.Model):
     workingTime = models.CharField(max_length=128)
     offersUntil = models.TimeField()
     tags = models.CharField(max_length=256)
-    picture = models.ImageField(upload_to='businesses', blank=True)
+    #default image from https://www.vecteezy.com/free-vector/food-icon
+    picture = models.ImageField(upload_to='businesses', blank=True, default="businesses/default.svg")
 
     lat = models.FloatField()
     long = models.FloatField()
