@@ -2,6 +2,8 @@
 from django import forms
 from finder.models import UserAccount, OwnerAccount, Business, Offer
 from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserChangeForm
 from finder.distance import validate_address
 User = get_user_model()
@@ -32,6 +34,18 @@ class UserForm(forms.ModelForm):
             'email',
             'password',
         )
+
+    # Override so we raise errors if the user login is bad or inactive
+    def validate(self,user):
+        email = self.cleaned_data.get('email')
+        password = self.cleaned_data.get('password')
+        try:
+            validate_password(user.password,user)
+        except ValidationError as ve:
+            self.add_error('password', ve.messages)
+            return False
+        return True
+
 
 
 class UserAccountForm(forms.ModelForm):

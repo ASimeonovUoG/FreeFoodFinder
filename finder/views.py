@@ -166,30 +166,32 @@ def signUp(request):
         # Init both forms - used if we have mortal users.
         user_form = UserForm(request.POST)
         account_form = UserAccountForm(request.POST)
+        # If user data is valid
         if user_form.is_valid():
             # Init user object
-            user = user_form.save()
-            # By the hidden field in the form we recognize if we want to create an Owner or a Mortal user.
-            if request.POST.get("isOwner") == "True":
-                # Set password and save user object
-                user.set_password(user.password)
-                user.save()
-                # Create owner account object passing the user
-                owner = OwnerAccount.create(user)
-                owner.save()
-                # Indicate success
-                registered = True
-            else:
-                # Set password and save user object
-                user.set_password(user.password)
-                user.save()
-                # Init account form object and pass the object then save.
-                account = account_form.save(commit=False)
-                account.user = user
-                account.save()
-                # Indicate success
-                registered = True
-
+            user = user_form.save(commit=False)
+            if user_form.validate(user):
+                user = user_form.save()
+                # By the hidden field in the form we recognize if we want to create an Owner or a Mortal user.
+                if request.POST.get("isOwner") == "True":
+                    # Set password and save user object
+                    user.set_password(user.password)
+                    user.save()
+                    # Create owner account object passing the user
+                    owner = OwnerAccount.create(user)
+                    owner.save()
+                    # Indicate success
+                    registered = True
+                else:
+                    # Set password and save user object
+                    user.set_password(user.password)
+                    user.save()
+                    # Init account form object and pass the object then save.
+                    account = account_form.save(commit=False)
+                    account.user = user
+                    account.save()
+                    # Indicate success
+                    registered = True
         else:
             None
             # If form is not valid, it will be automatically included in the form and passed
@@ -204,7 +206,7 @@ def signUp(request):
         'account_form': account_form,
         'registered': registered
     }
-
+    print(context_dict)
     return render(request, 'finder/signUp.html', context_dict)
 
 
