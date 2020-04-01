@@ -3,10 +3,10 @@
 
 {% block body_block %}
 
-<div class="title"><a href="{% url 'finder:home' %}"><img src="{% static 'images/logo.png' %}" alt="Free Food Finder"></a>
+<div class="title"><a href="{% url 'finder:home' %}"><img src="{% static 'images/logo.png' %}"
+                                                          alt="Free Food Finder"></a>
     <h1><a href="{% url 'finder:home' %}">Free Food Finder</a></h1>
 </div>
-
 
 
 <div class="search-bar">
@@ -56,7 +56,8 @@
     <div class="offer">
         <a href="{% url 'finder:show_business' offer.business.slug %}"><img src="{{ offer.business.picture.url }}"/></a>
         <div class="offer-info">
-            <h3><a href="{% url 'finder:show_business' offer.business.slug %}">{{ offer.business.businessName }}</a></h3>
+            <h3><a href="{% url 'finder:show_business' offer.business.slug %}">{{ offer.business.businessName }}</a>
+            </h3>
             Keywords: {{ offer.business.tags }}</br>
             {{ offer.business.address }}</br>
             {{ offer.portionAmount }} portions available now!
@@ -64,17 +65,18 @@
 
 
             <form class="form-inline"
-            id="reserve"
-            method="post"
-            action="{% url 'finder:reserve' %}">
+                  id="reserve"
+                  method="post"
+                  action="{% url 'finder:reserve' %}">
 
-            {% csrf_token %}
+                {% csrf_token %}
 
-            <button class="btn btn-primary"
-                type="submit"
-                id="reserve_meal"
-                name="reserve_meal"
-                value="{{ offer.id }}">Grab one</button>
+                <button class="btn btn-primary"
+                        type="submit"
+                        id="reserve_meal"
+                        name="reserve_meal"
+                        value="{{ offer.id }}">Grab one
+                </button>
             </form>
 
 

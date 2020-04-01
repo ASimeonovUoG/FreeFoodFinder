@@ -7,25 +7,25 @@ My Businesses
 
 {% block body_block %}
 
-    <div class="title"><h1>My Businesses</h1></div>
-      {% if user_businesses %}
-    <div class="all_businesses">
+<div class="title"><h1>My Businesses</h1></div>
+{% if user_businesses %}
+<div class="all_businesses">
 
-      {% for business in user_businesses %}
-        <div class="business">
+    {% for business in user_businesses %}
+    <div class="business">
         <a href="{% url 'finder:adminPanel' business.slug %}"><img src="{{ business.picture.url }}"/></a></a>
         <div class="offer-info">
             <h3><a href="{% url 'finder:adminPanel' business.slug %}">{{ business.businessName }}</a></h3>
             {{ business.description }}
-            </div>
         </div>
-
-        {% endfor %}
-        {% endif %}
     </div>
 
-    <div id="add_business">
-        <a href = "{% url 'finder:addBusiness' %}"><img src="{% static 'images/add_sign.png' %}" alt="Add a Business"></a>
-    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+
+<div id="add_business">
+    <a href="{% url 'finder:addBusiness' %}"><img src="{% static 'images/add_sign.png' %}" alt="Add a Business"></a>
+</div>
 
 {% endblock %}

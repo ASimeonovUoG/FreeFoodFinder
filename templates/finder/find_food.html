@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    Find Food
+Find Food
 {% endblock %}
 
 {% block body_block %}
@@ -24,16 +24,15 @@
                    id="query"
                    placeholder="Enter your postcode!"
                    autofocus
-                   required
-            />
+                   required/>
         </div>
 
-<!--        select the search radius-->
-<!--            https://www.w3schools.com/tags/tag_select.asp-->
+        <!--        select the search radius-->
+        <!--            https://www.w3schools.com/tags/tag_select.asp-->
         <div class="form-group">
             <select class="form-control" id="radius" name="radius">
-<!--                https://stackoverflow.com/questions/22822427/bootstrap-select-dropdown-list-placeholder-->
-<!--                10 is the default-->
+                <!--                https://stackoverflow.com/questions/22822427/bootstrap-select-dropdown-list-placeholder-->
+                <!--                10 is the default-->
                 <option value="10" selected>Default search radius</option>
                 <option value="1">1km</option>
                 <option value="5">5km</option>
@@ -41,8 +40,7 @@
                 <option value="25">25km</option>
                 <option value="50">50km</option>
             </select>
-  </div>
-
+        </div>
 
         <button class="btn btn-primary"
                 type="submit"
@@ -62,7 +60,8 @@
 <div class="featured-offers">
     {% if offers %}
     {% if no_results %}
-    <div class="search_error"><p>There are currently no offers in your area. Please try again later, or have a look at our featured offers:</p></div>
+    <div class="search_error"><p>There are currently no offers in your area. Please try again later, or have a look at
+        our featured offers:</p></div>
     <h2>Featured Offers</h2>
     {% else %}
     <h2>Search Results</h2>
@@ -71,24 +70,26 @@
     <div class="offer">
         <a href="{% url 'finder:show_business' offer.business.slug %}"><img src="{{ offer.business.picture.url }}"/></a>
         <div class="offer-info">
-            <h3><a href="{% url 'finder:show_business' offer.business.slug %}">{{ offer.business.businessName }}</a></h3>
+            <h3><a href="{% url 'finder:show_business' offer.business.slug %}">{{ offer.business.businessName }}</a>
+            </h3>
             Keywords: {{ offer.business.tags }}<br/>
             {{ offer.business.address }}<br/>
             {{ offer.portionAmount }} portions available now!
             Offers until: {{ offer.business.offersUntil }}
 
             <form class="form-inline"
-            id="reserve"
-            method="post"
-            action="{% url 'finder:reserve' %}">
+                  id="reserve"
+                  method="post"
+                  action="{% url 'finder:reserve' %}">
 
-            {% csrf_token %}
+                {% csrf_token %}
 
-            <button class="btn btn-primary"
-                type="submit"
-                id="reserve_meal"
-                name="reserve_meal"
-                value="{{ offer.id }}">Grab one</button>
+                <button class="btn btn-primary"
+                        type="submit"
+                        id="reserve_meal"
+                        name="reserve_meal"
+                        value="{{ offer.id }}">Grab one
+                </button>
             </form>
 
         </div>
