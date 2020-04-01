@@ -1,5 +1,15 @@
-.mynav {
-  
+ body {
+ position: relative;
+ }
+
+ #sidebar {
+    z-index: 1 !important;
+    width: 150px !important;
+    height: 100vw !important;
+    background: rgb(107, 97, 97) !important;
+    color: white !important;
+    position: absolute !important;
+    margin-bottom:0;
 }
 
 .navbar {
@@ -14,14 +24,7 @@
     color: white !important;
 }
 
- #sidebar {
-    z-index: 1 !important;
-    width: 150px !important;
-    height: 100% !important;
-    background: rgb(107, 97, 97) !important;
-    color: white !important;
-    position: absolute !important;
-}
+
 ul ul {
    padding: 10px !important;
    border-bottom: 1px solid grey !important;
@@ -60,4 +63,40 @@ a:hover {
 
 .form_error {
     color: red;
+}
+
+
+
+.business{
+    background-color: #e5e5e5;
+    /*this is necessary so that the background colour is visible */
+    overflow: hidden;
+    border-bottom: 1px solid #555;
+    }
+
+.business img {
+    max-height: 300px;
+    max-width: 300px;
+    float: left;
+    clear: left;
+}
+
+.business-info {
+    float: left;
+    clear: right;
+}
+
+.business a {
+    color: #f2af58;
+    text-decoration: none;
+}
+
+
+#add_business img{
+    float: left;
+    clear: left;
+}
+
+#add_business a {
+    color: transparent;
 }

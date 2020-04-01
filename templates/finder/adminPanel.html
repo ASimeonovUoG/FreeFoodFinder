@@ -12,7 +12,8 @@ Admin Panel
 
 
     <div>
-      <form method="post" action="{% url 'finder:adminPanel' business.slug %}" enctype="multipart/form-data">
+      <form method="post" action="{% url 'finder:adminPanel' business.slug %}"
+            enctype="multipart/form-data">
         <div class="form-group">
           {% csrf_token %}
 
@@ -28,9 +29,6 @@ Admin Panel
             {% endif %}
             </p>
             {% endfor %}
-
-
-
         <button type="submit" class="btn btn-primary" name="submit_form">Save</button>
         </div>
       </form>
