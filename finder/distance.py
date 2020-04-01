@@ -1,15 +1,20 @@
 import googlemaps
+import os
 from math import radians, sin, cos, acos
 from django.core.exceptions import ValidationError
+
+# Convert to absolute path
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+keyFolder = os.path.join(THIS_FOLDER, '../google.key')
 
 def read_google_key():
     google_api_key = None
     try:
-        with open('google.key', 'r') as f:
+        with open(keyFolder, 'r') as f:
             google_api_key = f.readline().strip()
     except:
         try:
-            with open('../google.key') as f:
+            with open(keyFolder) as f:
                 google_api_key = f.readline().strip()
 
         except:
