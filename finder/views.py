@@ -55,7 +55,6 @@ def reserve(request):
 
 
 def home(request):
-    FEATURED_THRESHOLD = 50
     if request.method == 'POST':
         query = request.POST['query'].strip()
 
