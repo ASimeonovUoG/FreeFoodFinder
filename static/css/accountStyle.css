@@ -1,7 +1,3 @@
- body {
- position: relative;
- }
-
  #sidebar {
     z-index: 1 !important;
     width: 150px !important;
@@ -9,7 +5,6 @@
     background: rgb(107, 97, 97) !important;
     color: white !important;
     position: absolute !important;
-    margin-bottom:0;
 }
 
 .navbar {
@@ -24,42 +19,22 @@
     color: white !important;
 }
 
-
-ul ul {
+#sidebar .nav-link {
    padding: 10px !important;
    border-bottom: 1px solid grey !important;
+   color: white;
 }
 
-ul ul:hover {
-    background:bisque !important;
-    color: orange !important;
-}
 
 #page-content {
     margin-left: 170px;
     position: absolute;
-    
-}
-
-.mr-3 {
-    margin-top: 20px;
-    wdith: 200px;
-    height: 200px;  
 }
 
 
 p a {
     color: blue;
   }
-
-
-a {
-    color: white;
-}
-
-a:hover {
-    color:orange;
-}
 
 .form_error {
     color: red;
@@ -68,7 +43,6 @@ a:hover {
 
 .business{
     background-color: #e5e5e5;
-    /*this is necessary so that the background colour is visible */
     overflow: hidden;
     border-bottom: 1px solid #555;
     }
@@ -94,6 +68,8 @@ a:hover {
 #add_business img{
     float: left;
     clear: left;
+    height: 238px;
+    width: 241px;
 }
 
 #add_business a {
