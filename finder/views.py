@@ -9,7 +9,7 @@ from finder.distance import calculate_distance, read_google_key, validate_addres
 from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm, Update_form, OfferForm
 
 from django.contrib.auth.decorators import user_passes_test, login_required
-from finder.decorators import isOwner
+from finder.decorators import isOwner, isMortal
 from django.contrib.auth.forms import UserChangeForm, SetPasswordForm
 from django.contrib.auth import update_session_auth_hash
 # Create your views here.
@@ -414,6 +414,7 @@ def settings(request):
 
 
 @login_required
+@user_passes_test(isMortal)
 def currentReservation(request):
     # Gives the template a reseravtion if the user has one.
     reservation = False
@@ -425,8 +426,8 @@ def currentReservation(request):
 
 
 @login_required
+@user_passes_test(isMortal)
 def cancelOffer(request):
-    # TODO : What if it's an owner account
     cancelled = False
     cUser = UserAccount.objects.filter(user=request.user)[0]
     if cUser.reservation:

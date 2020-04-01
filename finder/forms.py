@@ -81,12 +81,12 @@ class Update_form(UserChangeForm):
 
 
 class BusinessForm(forms.ModelForm):
-    businessName = forms.CharField(required=False, label="Business name")
-    address = forms.CharField(required=False, label="Address", validators=[validate_address])
-    description = forms.CharField(required=False, label="Description")
-    workingTime = forms.CharField(required=False, label="Opening hours")
-    offersUntil = forms.TimeField(required=False, label="Offers until")
-    tags = forms.CharField(required=False, label="Keywords")
+    businessName = forms.CharField(required=True, label="Business name")
+    address = forms.CharField(required=True, label="Address", validators=[validate_address])
+    description = forms.CharField(required=True, label="Description")
+    workingTime = forms.CharField(required=True, label="Opening hours")
+    offersUntil = forms.TimeField(required=True, label="Offers until")
+    tags = forms.CharField(required=True, label="Keywords")
     picture = forms.ImageField(required=False, label="Picture")
 
     class Meta:
