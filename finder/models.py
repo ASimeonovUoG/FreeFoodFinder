@@ -5,11 +5,9 @@ User = get_user_model()
 from django.conf import settings
 from finder import distance
 
-# the User model has five attributes: password, email, first name, last name
 class OwnerAccount(models.Model):
     # link the OwnerAccount to a User model instance
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    # driversLicense/OwnerPermitID...
 
     def __str__(self):
         return self.user.email
@@ -51,7 +49,6 @@ class Business(models.Model):
         return self.businessName
 
 
-# offer is a weak entity, in spite of what the ER diagram says..
 class Offer(models.Model):
     business = models.OneToOneField(Business, on_delete=models.CASCADE)
     portionAmount = models.IntegerField()

@@ -13,7 +13,7 @@ My Businesses
 
     {% for business in user_businesses %}
     <div class="business">
-        <a href="{% url 'finder:adminPanel' business.slug %}"><img src="{{ business.picture.url }}"/></a></a>
+        <a href="{% url 'finder:adminPanel' business.slug %}"><img src="{{ business.picture.url }}"/></a>
         <div class="offer-info">
             <h3><a href="{% url 'finder:adminPanel' business.slug %}">{{ business.businessName }}</a></h3>
             {{ business.description }}
