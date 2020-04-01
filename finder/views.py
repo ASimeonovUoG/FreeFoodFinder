@@ -385,7 +385,7 @@ def settings(request):
 
     else:
         password_form = SetPasswordForm(user=request.user)
-        email_form = Update_form(instance=request.user)
+        email_form = Update_form(instance=request.user, data={'email': request.user.email})
 
     #affects rendering of the side bar
     is_owner = OwnerAccount.objects.filter(user=request.user).exists()
