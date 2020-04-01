@@ -14,7 +14,6 @@ from django.contrib.auth.forms import UserChangeForm, SetPasswordForm
 from django.contrib.auth import update_session_auth_hash
 # Create your views here.
 
-
 def about(request):
     # Simply render a page
     return render(request, 'finder/about.html')
@@ -91,6 +90,7 @@ def find_food(request):
     else:
         return render(request, 'finder/find_food.html', {})
 
+
 #helper function for home and find_food
 def generate_featured_offers():
     FEATURED_THRESHOLD = 50
@@ -100,6 +100,7 @@ def generate_featured_offers():
         if o.portionAmount > FEATURED_THRESHOLD:
             featured_offers.append(o)
     return featured_offers
+
 
 #helper function for home and find_food. Generates a list of offers close to query,
 #or a list of featured offers if there are no close offers, and returns the appropriate
@@ -138,7 +139,6 @@ def render_list_of_offers(request, query, distance_threshold=10):
             'no_results': no_results,
             'offers': offers
         })
-
 
 
 def show_business(request, business_name_slug):
@@ -263,7 +263,7 @@ def adminPanel(request, business_name_slug):
     business = get_object_or_404(Business, slug=business_name_slug)
 
     #if an owner types in the business name slug of a business that they do not own
-    #they can still access its admin panel because the decorator only checks if the
+    #they could still access its admin panel because the decorator only checks if the
     #user is an owner. This is a simple way of preventing that.
     if business.owner != get_object_or_404(OwnerAccount, user=request.user):
         return HttpResponse("You do not have permission to view this site.")
@@ -344,7 +344,7 @@ def adminPanel(request, business_name_slug):
     return render(request, 'finder/adminPanel.html', context_dict)
 
 
-#helper function for adminPanel
+#helper function for adminPanel, ends an offer and all associated reservations
 def end_offer(end_offer_id):
     offer = Offer.objects.get(id=end_offer_id)
     users_with_reservation = list(
@@ -417,7 +417,7 @@ def settings(request):
 @login_required
 @user_passes_test(isMortal)
 def currentReservation(request):
-    # Gives the template a reseravtion if the user has one.
+    # Gives the template a reservation if the user has one.
     reservation = False
     cUser = UserAccount.objects.filter(user=request.user)[0]
     if cUser.reservation:

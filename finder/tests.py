@@ -81,7 +81,7 @@ class HomeViewTests(TestCase):
         #this service is meant to be used in the UK, with UK postcodes. By supplying a foreign address we can
         #be sure that there won't be any offers in the area.
         response = c.post(reverse('finder:home'),
-                          {'query': "Sickingenstraße 41, 54296 Trier"})
+                          {'query': "Sickingenstr 41, 54296 Trier"})
         self.assertContains(response, "featured")
 
 
@@ -169,7 +169,6 @@ class AccountSettingsTests(TestCase):
 
     def test_email_change_fails_if_passwords_dont_match(self):
         c = Client()
-        #tests are only done with userAccount because UserAccount and OwnerAccount use the same custom user model anyway
         user = create_test_userAccount()
         c.login(username=user.user.email, password="MySecurePassword")
         response = c.post(
@@ -183,7 +182,6 @@ class AccountSettingsTests(TestCase):
 
     def test_email_change_succeeds_with_matching_passwords(self):
         c = Client()
-        #tests are only done with userAccount because UserAccount and OwnerAccount use the same custom user model anyway
         user = create_test_userAccount()
         c.login(username=user.user.email, password="MySecurePassword")
         response = c.post(
@@ -196,7 +194,6 @@ class AccountSettingsTests(TestCase):
 
     def test_password_change_succeeds_with_matching_passwords(self):
         c = Client()
-        #tests are only done with userAccount because UserAccount and OwnerAccount use the same custom user model anyway
         user = create_test_userAccount()
         c.login(username=user.user.email, password="MySecurePassword")
         response = c.post(
@@ -261,6 +258,6 @@ class BusinessFormTests(TestCase):
             "picture": "trevi-italian.jpg"
         })
         self.assertFalse(business_form.is_valid())
-        self.assertEqual(business_form.errors, {{
+        self.assertEqual(business_form.errors, {
             'offersUntil': ['Enter a valid time.']
-        }})
+        })
