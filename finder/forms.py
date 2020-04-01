@@ -18,7 +18,7 @@ class NonstickyEmailInput(forms.EmailInput):
 
 class UserForm(forms.ModelForm):
     email = forms.CharField(
-        label="", widget=NonstickyEmailInput(attrs={'placeholder': 'Email'}))
+        label="", widget=NonstickyEmailInput(attrs={'placeholder': 'Email address'}))
     password = forms.CharField(
         label="",
         widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
@@ -41,8 +41,8 @@ class UserAccountForm(forms.ModelForm):
 
 
 class UserLoginForm(forms.ModelForm):
-    email = forms.CharField(widget=forms.EmailInput())
-    password = forms.CharField(widget=forms.PasswordInput())
+    email = forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'Email','autofocus':'autofocus', 'class':'form-control', 'id':'inputemail' }))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={ 'placeholder': 'Password' , 'class':'form-control', 'id':'inputpassword'}))
 
     class Meta:
         model = User

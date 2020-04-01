@@ -16,10 +16,12 @@ from django.contrib.auth import update_session_auth_hash
 
 
 def about(request):
+    # Simply render a page
     return render(request, 'finder/about.html')
 
 
 def contact(request):
+    # Simply render a page
     return render(request, 'finder/contact.html')
 
 
@@ -28,7 +30,7 @@ def reserve(request):
         if request.user.is_authenticated:
             this_user = UserAccount.objects.filter(user=request.user)
 
-        #no UserAccount was found where request.user is the user. That is, the user is an owner.
+            #no UserAccount was found where request.user is the user. That is, the user is an owner.
             if len(this_user) == 0:
                 reserved_business = None
             else:
@@ -44,7 +46,7 @@ def reserve(request):
                 else:
                     reserved_business = None
             return render(request, 'finder/reserve.html',
-                      {"reserved_business": reserved_business})
+                          {"reserved_business": reserved_business})
         else:
             return redirect(reverse('finder:user_login'))
     #this site should only be accessed following a POST request
@@ -69,9 +71,9 @@ def home(request):
                 featured_offers.append(o)
 
     return render(request, 'finder/home.html', {
-            'invalid': invalid,
-            'featured_offers': featured_offers
-        })
+        'invalid': invalid,
+        'featured_offers': featured_offers
+    })
 
 
 def find_food(request):
@@ -100,8 +102,7 @@ def render_list_of_offers(request, query, distance_threshold=10):
     businesses = Business.objects.all()
     for b in businesses:
         try:
-            if calculate_distance(b.lat, b.long,
-                                  query) < distance_threshold:
+            if calculate_distance(b.lat, b.long, query) < distance_threshold:
                 offer = Offer.objects.filter(business=b)
                 # appends the offer because offers are associated with businesses. And a business should only appear
                 # in the search results if it has an offer
@@ -148,40 +149,45 @@ def show_business(request, business_name_slug):
 
 
 def signUp(request):
+    # Use this flag to indicate success in template
     registered = False
     if request.method == "POST":
+        # Init both forms - used if we have mortal users.
         user_form = UserForm(request.POST)
         account_form = UserAccountForm(request.POST)
         if user_form.is_valid():
+            # Init user object
             user = user_form.save()
-            # Branching logic as to if we want to create an Owner
-            # or a Mortal user.
+            # By the hidden field in the form we recognize if we want to create an Owner or a Mortal user.
             if request.POST.get("isOwner") == "True":
+                # Set password and save user object
                 user.set_password(user.password)
                 user.save()
-
+                # Create owner account object passing the user
                 owner = OwnerAccount.create(user)
                 owner.save()
-
+                # Indicate success
                 registered = True
             else:
+                # Set password and save user object
                 user.set_password(user.password)
                 user.save()
-
+                # Init account form object and pass the object then save.
                 account = account_form.save(commit=False)
                 account.user = user
-
                 account.save()
-
+                # Indicate success
                 registered = True
 
         else:
             None
-            #print(user_form.errors, account_form.errors)
+            # If form is not valid, it will be automatically included in the form and passed
+            # to the template via the context dictionary.
     else:
+        # If not a POST - just render two empty forms
         user_form = UserForm()
         account_form = UserAccountForm()
-
+    # Pass forms and flag to template
     context_dict = {
         'user_form': user_form,
         'account_form': account_form,
@@ -191,38 +197,24 @@ def signUp(request):
     return render(request, 'finder/signUp.html', context_dict)
 
 
-def user_loginOLD(request):
-    if request.method == "POST":
-        username = request.POST.get('email')
-        password = request.POST.get('password')
-
-        user = authenticate(email=username, password=password)
-        if user:
-            if user.is_active:
-                login(request, user)
-                return redirect(reverse('finder:home'))
-            else:
-                return HttpResponse("Your account is disabled")
-        else:
-            return HttpResponse("Your credentials are invalid")
-    else:
-        login_form = UserLoginForm()
-        context_dict = {'login_form': login_form}
-        return render(request, 'finder/user_login.html', context_dict)
-
-
 def user_login(request):
+    # Init an empty form or with the POST data if any
     login_form = UserLoginForm(request.POST or None)
+    # If we have a POST request
     if request.POST and login_form.is_valid():
+        # Login is an additional method in the form.
         user = login_form.login(request)
         if user:
             login(request, user)
-            return redirect(reverse('finder:home'))  # Redirect to a success page.
+            return redirect(
+                reverse('finder:home'))  # Redirect to a success page.
+    # If we do not have POST request - return an empty form to render
     context_dict = {'login_form': login_form}
     return render(request, 'finder/user_login.html', context_dict)
 
 
 def user_logout(request):
+    # Take the user form the request and log them out.
     logout(request)
     return redirect(reverse('finder:home'))
 
@@ -238,8 +230,10 @@ def support(request):
 def myBusinesses(request):
     this_owner = OwnerAccount.objects.get(user=request.user)
     owner_businesses = list(Business.objects.filter(owner=this_owner))
-    return render(request, 'finder/myBusinesses.html',
-                  {'user_businesses': owner_businesses, 'is_owner': True})
+    return render(request, 'finder/myBusinesses.html', {
+        'user_businesses': owner_businesses,
+        'is_owner': True
+    })
 
 
 @login_required
@@ -253,7 +247,7 @@ def account(request):
 @user_passes_test(isOwner)
 def adminPanel(request, business_name_slug):
     current_offer = None
-    business = get_object_or_404(Business, slug = business_name_slug)
+    business = get_object_or_404(Business, slug=business_name_slug)
 
     #if an owner types in the business name slug of a business that they do not own
     #they can still access its admin panel because the decorator only checks if the
@@ -269,18 +263,26 @@ def adminPanel(request, business_name_slug):
         #check if the button with name "submit_form" was clicked
         if "submit_form" in request.POST:
             #need request.FILES so that the user can upload a new picture
-            business_form = BusinessForm(request.POST, request.FILES, instance=business)
+            business_form = BusinessForm(request.POST,
+                                         request.FILES,
+                                         instance=business)
 
             if business_form.is_valid():
                 business = business_form.save(commit=False)
-                business.owner = get_object_or_404(OwnerAccount, user=request.user)
+                business.owner = get_object_or_404(OwnerAccount,
+                                                   user=request.user)
                 business.save()
                 return redirect('finder:myBusinesses')
             else:
                 #render the entire page again, but with the same form, so the errors are displayed
                 add_offer_form = OfferForm()
-                context_dict = {'business_form': business_form, 'add_offer_form': add_offer_form,
-                                'current_offer': current_offer, 'business': business, 'is_owner': True}
+                context_dict = {
+                    'business_form': business_form,
+                    'add_offer_form': add_offer_form,
+                    'current_offer': current_offer,
+                    'business': business,
+                    'is_owner': True
+                }
                 return render(request, 'finder/adminPanel.html', context_dict)
 
         #ending an offer
@@ -306,25 +308,34 @@ def adminPanel(request, business_name_slug):
             return redirect('finder:myBusinesses')
 
     #prepopulate the fields
-    business_form = BusinessForm(data = {'businessName' : business.businessName,
-                                             'address': business.address,
-                                             'description': business.description,
-                                             'workingTime': business.workingTime,
-                                             'offersUntil': business.offersUntil,
-                                             'tags': business.tags,
-                                             'picture': business.picture})
+    business_form = BusinessForm(
+        data={
+            'businessName': business.businessName,
+            'address': business.address,
+            'description': business.description,
+            'workingTime': business.workingTime,
+            'offersUntil': business.offersUntil,
+            'tags': business.tags,
+            'picture': business.picture
+        })
 
     add_offer_form = OfferForm()
 
-    context_dict = {'business_form': business_form, 'add_offer_form': add_offer_form, 'current_offer':current_offer, 'business':business, 'is_owner': True,
-        }
+    context_dict = {
+        'business_form': business_form,
+        'add_offer_form': add_offer_form,
+        'current_offer': current_offer,
+        'business': business,
+        'is_owner': True,
+    }
     return render(request, 'finder/adminPanel.html', context_dict)
 
 
 #helper function for adminPanel
 def end_offer(end_offer_id):
     offer = Offer.objects.get(id=end_offer_id)
-    users_with_reservation = list(UserAccount.objects.filter(reservation=offer))
+    users_with_reservation = list(
+        UserAccount.objects.filter(reservation=offer))
     for u in users_with_reservation:
         u.reservation = None
         u.save()
@@ -338,7 +349,6 @@ def delete_business(business_id):
     if len(offers) != 0:
         end_offer(offers[0].id)
     business.delete()
-
 
 @login_required
 @user_passes_test(isOwner)
@@ -364,8 +374,7 @@ def add_business(request):
 @login_required
 def settings(request):
     if request.method == 'POST':
-        password_form = SetPasswordForm(data=request.POST,
-                                        user=request.user)
+        password_form = SetPasswordForm(data=request.POST, user=request.user)
         email_form = Update_form(request.POST, instance=request.user)
 
         if password_form.is_valid() and email_form.is_valid():
@@ -380,6 +389,9 @@ def settings(request):
 
     #affects rendering of the side bar
     is_owner = OwnerAccount.objects.filter(user=request.user).exists()
-    context_dict = {'password_form': password_form, 'email_form': email_form, 'is_owner': is_owner}
+    context_dict = {
+        'password_form': password_form,
+        'email_form': email_form,
+        'is_owner': is_owner
+    }
     return render(request, 'finder/settings.html', context_dict)
-
