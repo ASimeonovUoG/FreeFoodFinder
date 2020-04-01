@@ -1,0 +1,15 @@
+.pyc
+.DS_Store
+__pycache__/
+FreeFoodFinder/__pycache__
+FreeFoodFinder/__pycache__/
+db.sqlite3
+*.key
+thumbs.db
+finder/migrations/0001_initial.py
+*cpython-37.pyc
+*.cpython-37.pyc
+requirements.txt
+.vscode/
+
+
