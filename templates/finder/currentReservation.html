@@ -13,13 +13,21 @@ Settings
     {% if reservation %}
     <div class="alert alert-success" role="alert">
         You have booked an offer! Please pick up your meal at <strong>{{ reservation.business.businessName }},
-        {{ reservation.business.address }} before {{reservation.business.offersUntil }}</strong>.
+            {{ reservation.business.address }} before {{reservation.business.offersUntil }}</strong>.
+            <br/>
+            Do you wish to <strong><a href="{% url 'finder:cancelOffer' %}" class="alert-link">Cancel your booking ?</a></strong>
     </div>
     {% else %}
-    <div class="alert alert-danger">
-        No booked offer. <a href="{% url 'finder:user_login' %}"
-            class="alert-link">Reserve now !</a>
+    {% if cancelled %}
+    <div class="alert alert-success">
+        You have successfully cancelled your order.
     </div>
     {% endif %}
+    <div class="alert alert-danger">
+        No booked offer. <a href="{% url 'finder:home' %}" class="alert-link">Reserve now !</a>
+    </div>
+    {% endif %}
+
+
 </div>
 {% endblock %}
