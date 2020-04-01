@@ -1,9 +1,14 @@
-.mynav {
-  
+/* #sidebar {
+    z-index: 1 !important;
+    width: 150px !important;
+    height: 100vw !important;
+    background: rgb(107, 97, 97) !important;
+    color: white !important;
+    position: absolute !important;
 }
-
+*/
 .navbar {
-    background: #f2af58 !important;
+   background:  rgb(107, 97, 97) !important;
 }
 
 .navbar .navbar-brand {
@@ -14,33 +19,23 @@
     color: white !important;
 }
 
+
+#sidebar .nav-link {
+    color: white !important;
+}
+
  #sidebar {
     width: 150px !important;
-    height: 100% !important;
+    height: 100vw !important;
     background: rgb(107, 97, 97) !important;
     color: white !important;
     position: absolute !important;
 }
-ul ul {
-   padding: 10px !important;
-   border-bottom: 1px solid grey !important;
-}
 
-ul ul:hover {
-    background:bisque !important;
-    color: orange !important;
-}
 
 #page-content {
     margin-left: 170px;
     position: absolute;
-    
-}
-
-.mr-3 {
-    margin-top: 20px;
-    wdith: 200px;
-    height: 200px;  
 }
 
 
@@ -48,27 +43,59 @@ p a {
     color: blue;
   }
 
-
-a {
-    color: white;
-}
-
-a:hover {
-    color:orange;
-}
-
 .form_error {
     color: red;
 }
+
+
+.business{
+    background-color: #e5e5e5;
+    overflow: hidden;
+    border-bottom: 1px solid #555;
+    }
+
+.business img {
+    max-height: 300px;
+    max-width: 300px;
+    float: left;
+    clear: left;
+}
+
+.business-info {
+    float: left;
+    clear: right;
+}
+
+.business a {
+    color: #f2af58;
+    text-decoration: none;
+}
+
+
+#add_business img{
+    float: left;
+    clear: left;
+    height: 238px;
+    width: 241px;
+    padding-bottom: 50px;
+}
+
+
+#add_business a {
+    color: transparent;
+    }
 
 .footer {
     position: fixed;
     bottom: 0;
     height: 20px;
     line-height: 20px;
+    margin-left: 150px;
 }
 
 .footer .navbar {
+    color: #f2af58 !important;
+    background:  rgb(107, 97, 97) !important;
     position: absolute;
     bottom: 0;
     width: 100vw;

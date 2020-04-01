@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 from finder.models import Business, Offer, OwnerAccount, UserAccount
 
-from finder.distance import calculate_distance, read_google_key, validate_address
+from finder.distance import calculate_distance, read_google_key
 from finder.forms import UserForm, UserAccountForm, UserLoginForm, BusinessForm, Update_form, OfferForm
 
 from django.contrib.auth.decorators import user_passes_test, login_required
@@ -300,6 +300,12 @@ def adminPanel(request, business_name_slug):
                 offer.save()
                 return redirect('finder:myBusinesses')
 
+        elif "delete" in request.POST:
+            business_id = request.POST['delete'].strip()
+            if business_id:
+                delete_business(business_id)
+            return redirect('finder:myBusinesses')
+
     #prepopulate the fields
     business_form = BusinessForm(
         data={
@@ -335,23 +341,33 @@ def end_offer(end_offer_id):
     offer.delete()
 
 
+#helper function for adminPanel, deletes a business and ends all associated offers
+def delete_business(business_id):
+    business = Business.objects.get(id=business_id)
+    offers = Offer.objects.filter(business=business)
+    if len(offers) != 0:
+        end_offer(offers[0].id)
+    business.delete()
+
 @login_required
 @user_passes_test(isOwner)
 def add_business(request):
     new_business_form = BusinessForm()
 
     if request.method == 'POST':
-        new_business_form = BusinessForm(request.POST)
+        new_business_form = BusinessForm(request.POST, request.FILES)
 
         if new_business_form.is_valid():
             business = new_business_form.save(commit=False)
             business.owner = OwnerAccount.objects.get(user=request.user)
             business.save()
-            return redirect('/finder/')
+            return redirect('finder:home')
         else:
-            print(new_business_form.errors)
-    context_dict = {'new_business_form': new_business_form}
-    return render(request, 'finder/addBusiness.html', context_dict)
+            context_dict = {'new_business_form': new_business_form}
+            return render(request, 'finder/addBusiness.html', context_dict)
+    is_owner = OwnerAccount.objects.filter(user=request.user).exists()
+    context_dict = {'new_business_form' : new_business_form, 'is_owner':is_owner}
+    return render(request, 'finder/addBusiness.html',context_dict)
 
 
 @login_required

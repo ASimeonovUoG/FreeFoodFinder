@@ -16,29 +16,20 @@
 
 <!--https://www.w3schools.com/howto/howto_css_images_side_by_side.asp-->
 
-
-            <div class="image-row">
-
-            <div class="image-column">
+        <div class="image-row">
             <img  src='{{ business.picture.url }}' alt="{{ business.businessName }}"/>
-            </div>
 
-            <div class="image-column">
 <!--https://developers.google.com/maps/documentation/embed/guide-->
             <iframe
-              width="450"
+                    width="60%"
               frameborder="0" style="border:0"
                src="https://www.google.com/maps/embed/v1/search?key={{ key }}&q={{ business.lat }},{{ business.long }}" allowfullscreen>
            </iframe>
-             </div>
-            </div>
-
-
-
+        </div>
 
         <div class="business-descr">
             <p>
-        {{ business.address }} <br />
+        {{ business.address }} <br/>
         Working Hours: {{ business.workingTime}} <br/>
                 Offers until: {{ business.offersUntil }}<br/><br/>
             {{ business.description }}
@@ -47,7 +38,6 @@
         </p>
            {% if offer %}
                 Currently {{ offer.portionAmount }} offers!
-                {% if user.is_authenticated %}
                <form class="form-inline"
                      id="reserve"
                     method="post"
@@ -55,21 +45,16 @@
 
                 {% csrf_token %}
 
-                <button class="btn btn-primary"
+                   <button class="btn btn-primary"
                     type="submit"
                     id="reserve_meal"
                     name="reserve_meal"
                     value="{{ offer.id }}">Grab one</button>
                 </form>
-                {% else %}
-                    <br/>
-                    <a class="btn btn-primary" href="{% url 'finder:user_login' %}" role="button">Grab one</a>
-                {% endif %}
             {% else %}
                 There are currently no offers available.
             {% endif %}
         </div>
-
 
 
     {% else %}

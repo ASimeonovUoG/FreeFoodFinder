@@ -13,6 +13,7 @@
     <title>Free Food Finder</title>
   </head>
   <body>
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="{% url 'finder:home' %}">Free Food Finder</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,17 +32,17 @@
       </div>
     </nav>
       
-      
     <div id = "sidebar">
-      <ul>
-          <ul><a href = "{% url 'finder:settings' %}">Account Settings</a></ul>
-          <ul><a href = "{% url 'finder:curentReservation' %}">Current Reservation</a></ul>
+
+          <a class="nav-link" href="{% url 'finder:settings' %}">Account Settings <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="{% url 'finder:curentReservation' %}">Current Reservation <span class="sr-only">(current)</span></a>
           {% if is_owner %}
-          <ul><a href = "{% url 'finder:myBusinesses' %}">My Businesses</a></ul>
-          <ul><a href = "{% url 'finder:support' %}">Support</a></ul>
+          <a class="nav-link" href="{% url 'finder:myBusinesses' %}">My Businesses <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="{% url 'finder:support' %}">Support <span class="sr-only">(current)</span></a>
+
           {% endif %}
-      </ul>
   </div>
+
   
   <div>
     <div id="page-content">

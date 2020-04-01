@@ -7,11 +7,25 @@ Add Business
 
 {% block body_block %}
     <div class="title"><h1>Create a new Business</h1></div>
-    <div>
-        <form method ="post">
+      <div>
+      <form method="post" action="{% url 'finder:addBusiness' %}"
+            enctype="multipart/form-data">
+        <div class="form-group">
           {% csrf_token %}
-          {{ new_business_form.as_p }}
-          <button type="submit">Create</button>  </button>
-        </form>
+           {% for field in new_business_form %}
+
+            <p>{{ field.label_tag }} {{ field }}
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                    <div class="form_error">
+                        {{ error|escape }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            </p>
+            {% endfor %}
+        <button type="submit" class="btn btn-primary" name="submit_form">Save</button>
+        </div>
+      </form>
     </div>
 {% endblock %}

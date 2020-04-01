@@ -97,8 +97,14 @@ class ReservationTests(TestCase):
     def test_OwnerAccount_cannot_reserve(self):
         c = Client()
         owner = create_test_ownerAccount()
-        c.login(username=owner.user.email, password="Password123")
+        c.login(username=owner.user.email, password="123password")
         offer_id = create_test_offer().id
         response = c.post(reverse('finder:reserve'), {'reserve_meal': offer_id})
         self.assertContains(response, "Something went wrong")
+
+    def test_reserve_not_logged_in_gets_redirected(self):
+        c = Client()
+        offer_id = create_test_offer().id
+        response = c.post(reverse('finder:reserve'), {'reserve_meal': offer_id})
+        self.assertRedirects(response, reverse('finder:user_login'))
 
