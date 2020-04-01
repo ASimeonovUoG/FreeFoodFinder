@@ -3,10 +3,18 @@
 
 {% block body_block %}
 {% if reserved_business %}
-    <h1 class="title">Success!</h1>
-    <p>Thank you for your reservation! Please pick up your meal at {{ reserved_business }}, {{ reserved_business.address }} before {{reserved_business.offersUntil }} . </p>
+<h1 class="title">Success!</h1>
+<div class="alert alert-success" role="alert">
+    Thank you for your reservation! Please pick up your meal at {{ reserved_business }},
+    {{ reserved_business.address }} before {{reserved_business.offersUntil }}.
+</div>
 {% else %}
-   <h1 class="title">Something went wrong</h1>
-    <p>You cannot reserve this meal. Please ensure that you are logged in as a client (not a business owner) and that you have no outstanding reservations.</p>
+<h1 class="title">Something went wrong</h1>
+<div class="alert alert-danger">
+    You cannot reserve this meal. Please ensure that you are <a href="{% url 'finder:user_login' %}"
+        class="alert-link">logged in</a> as a client (not a business owner) and
+    that you have no outstanding reservations.
+
+</div>
 {% endif %}
 {% endblock %}
