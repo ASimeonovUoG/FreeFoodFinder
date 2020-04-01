@@ -13,7 +13,7 @@
 the footer*/
 
 #content-wrap {
-    padding-bottom: 20px;
+    padding-bottom: 50px;
     /* Footer height */
 }
 
@@ -159,23 +159,21 @@ h2 {
     text-align: center;
 }
 
-
 /*individual business page*/
-/*https://www.w3schools.com/howto/howto_css_images_side_by_side.asp*/
-
-.image-column {
-  float: left;
-  width: 50%;
-  padding: 5px;
-}
 
 .image-row {
     position: relative;
     overflow: hidden;
-    background-color: #e5e5e5;
 }
 
-iframe {
+ .image-row img {
+    float: left;
+    width: 40%;
+    max-height: 333px;
+ }
+
+.image-row iframe {
+    float: right;
     position: absolute;
     height: 100%;
 }
@@ -185,6 +183,7 @@ iframe {
   clear: both;
   display: table;
 }
+
 
 .business-descr {
     text-align: center;
