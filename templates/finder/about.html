@@ -6,12 +6,19 @@ About Us
 {% endblock %}
 
 {% block body_block %}
-    <div class="title"><h1>About Free Food Finder</h1></div>
-    <div>
-        <p>
-We give restaurant and food industry owners the ability to advertise all surplus food they have at the end of the working day and offer it for free customers at selected times.
-Restaurant owners can create an account and provide a description of what type of food they are giving away and also location and collection times.
-Users can create an account and reserve a meal.
+<div class="title">
+    <a href="{% url 'finder:home' %}"><img src="{% static 'images/logo.png' %}"
+        alt="Free Food Finder"></a>
+    <h1>About Us</h1>
+</div>
+<div class="row text-center justify-content-md-center">
+    <div class="col-md-8">
+        <p class="text-center lead">
+            We give restaurant and food industry owners the ability to advertise all surplus food they have at the end
+            of the working day and offer it for free customers at selected times. Restaurant owners can create an account
+            and provide a description of what type of food they are giving
+            away and also location and collection times. Users can create an account and reserve a meal.
         </p>
     </div>
+</div>
 {% endblock %}
