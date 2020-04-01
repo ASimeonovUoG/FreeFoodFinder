@@ -6,17 +6,34 @@ Contact
 {% endblock %}
 
 {% block body_block %}
-    <div class="title"><h1>Contact Us</h1></div>
-    <div>
-        <p>
-        <ul>
-        <li>
-            Phone: 0000 0000000
-        </li>
-        <li>
-            Email: enquiries@freefoodfinder.co.uk
-        </li>
-    </ul>
-        </p>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div class="title">
+    <a href="{% url 'finder:home' %}"><img src="{% static 'images/logo.png' %}" alt="Free Food Finder"></a>
+    <h1>Contact Us</h1>
+</div>
+<div class="row text-center justify-content-md-center">
+    <div class="col-md-36 text-center">
+        <ul class="list-unstyled mb-0">
+            <li><span class="material-icons md-48 md-dark">
+                    home
+                </span>
+                <p class="text-center lead"> University of Glasgow, Gilbert Scott Building, University Ave, Glasgow G12
+                    8QQ</p>
+            </li>
+
+            <li><span class="material-icons md-48 md-dark">
+                    phone_enabled
+                </span>
+                <p class="text-center lead">+441234 567 890</p>
+            </li>
+
+            <li><span class="material-icons md-48 md-dark">
+                    alternate_email
+                </span>
+                <p class="text-center lead">2390362S@student.gla.ac.uk</p>
+            </li>
+        </ul>
     </div>
+</div>
+
 {% endblock %}
