@@ -1,0 +1,14 @@
+{% extends 'finder/sidebar_base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+Add offer
+{% endblock %}
+      <form>
+        <div class="form-group">
+          {% csrf_token %}
+          {{ offer_form.as_p}}
+        <button type="submit" class="btn btn-primary">Save</button>
+      </form>
+{% block body_block %}
+{% endblock %}

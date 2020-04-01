@@ -33,8 +33,9 @@
     </nav>
       
     <div id = "sidebar">
-          <a class="nav-link" href="{% url 'finder:settings' %}">Account Settings <span class="sr-only">(current)</span></a>
 
+          <a class="nav-link" href="{% url 'finder:settings' %}">Account Settings <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="{% url 'finder:curentReservation' %}">Current Reservation <span class="sr-only">(current)</span></a>
           {% if is_owner %}
           <a class="nav-link" href="{% url 'finder:myBusinesses' %}">My Businesses <span class="sr-only">(current)</span></a>
           <a class="nav-link" href="{% url 'finder:support' %}">Support <span class="sr-only">(current)</span></a>

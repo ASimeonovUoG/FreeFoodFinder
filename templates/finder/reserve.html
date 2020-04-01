@@ -5,8 +5,8 @@
 {% if reserved_business %}
 <h1 class="title">Success!</h1>
 <div class="alert alert-success" role="alert">
-    Thank you for your reservation! Please pick up your meal at {{ reserved_business }},
-    {{ reserved_business.address }} before {{reserved_business.offersUntil }}.
+    Thank you for your reservation! Please pick up your meal at <strong>{{ reserved_business }},
+    {{ reserved_business.address }} before {{reserved_business.offersUntil }}.</strong>
 </div>
 {% else %}
 <h1 class="title">Something went wrong</h1>

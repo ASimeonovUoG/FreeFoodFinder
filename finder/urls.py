@@ -20,4 +20,6 @@ urlpatterns = [
     path('find_food/<slug:business_name_slug>/', views.show_business, name='show_business'),
     path("reserve/", views.reserve, name="reserve"),
     path("addBusiness/", views.add_business, name="addBusiness"),
+    path("curentReservation/", views.currentReservation, name="curentReservation"),
+    path("cancelOffer/", views.cancelOffer, name="cancelOffer")
 ]
