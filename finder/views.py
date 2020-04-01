@@ -11,7 +11,6 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 from finder.decorators import isOwner
 from django.contrib.auth.forms import UserChangeForm, SetPasswordForm
 from django.contrib.auth import update_session_auth_hash
-
 # Create your views here.
 
 
@@ -350,6 +349,7 @@ def delete_business(business_id):
         end_offer(offers[0].id)
     business.delete()
 
+
 @login_required
 @user_passes_test(isOwner)
 def add_business(request):
@@ -367,8 +367,11 @@ def add_business(request):
             context_dict = {'new_business_form': new_business_form}
             return render(request, 'finder/addBusiness.html', context_dict)
     is_owner = OwnerAccount.objects.filter(user=request.user).exists()
-    context_dict = {'new_business_form' : new_business_form, 'is_owner':is_owner}
-    return render(request, 'finder/addBusiness.html',context_dict)
+    context_dict = {
+        'new_business_form': new_business_form,
+        'is_owner': is_owner
+    }
+    return render(request, 'finder/addBusiness.html', context_dict)
 
 
 @login_required
@@ -395,3 +398,30 @@ def settings(request):
         'is_owner': is_owner
     }
     return render(request, 'finder/settings.html', context_dict)
+
+
+@login_required
+def currentReservation(request):
+    # Gives the template a reseravtion if the user has one.
+    reservation = False
+    cUser = UserAccount.objects.filter(user=request.user)[0]
+    if cUser.reservation:
+        reservation = cUser.reservation
+    return render(request, 'finder/currentReservation.html',
+                  {"reservation": reservation})
+
+
+@login_required
+def cancelOffer(request):
+    # TODO : What if it's an owner account
+    cancelled = False
+    cUser = UserAccount.objects.filter(user=request.user)[0]
+    if cUser.reservation:
+        offer = Offer.objects.filter(business=cUser.reservation.business)[0]
+        offer.portionAmount +=1
+        offer.save()
+        cUser.reservation = None
+        cUser.save()
+        cancelled = True
+    return render(request, 'finder/currentReservation.html',
+                  {'cancelled': cancelled})
