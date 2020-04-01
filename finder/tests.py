@@ -135,18 +135,6 @@ class ReservationTests(TestCase):
                           {'reserve_meal': offer_id})
         self.assertContains(response, "Something went wrong")
 
-    def test_UserAccount_with_reservation_cannot_reserve(self):
-        c = Client()
-        user = create_test_userAccount()
-        offer = create_test_offer()
-        offer_id = offer.id
-        user.reservation = offer
-        user.save()
-        c.login(username=user.user.email, password="MySecurePassword")
-        response = c.post(reverse('finder:reserve'),
-                          {'reserve_meal': offer_id})
-        self.assertContains(response, "Something went wrong")
-
     def test_OwnerAccount_cannot_reserve(self):
         c = Client()
         owner = create_test_ownerAccount()
