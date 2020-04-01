@@ -3,7 +3,7 @@
 }
 
 .navbar {
-  background: grey !important;
+    background: #f2af58 !important;
 }
 
 .navbar .navbar-brand {
@@ -15,7 +15,6 @@
 }
 
  #sidebar {
-    z-index: 1 !important;
     width: 150px !important;
     height: 100% !important;
     background: rgb(107, 97, 97) !important;
@@ -60,4 +59,17 @@ a:hover {
 
 .form_error {
     color: red;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    height: 20px;
+    line-height: 20px;
+}
+
+.footer .navbar {
+    position: absolute;
+    bottom: 0;
+    width: 100vw;
 }
