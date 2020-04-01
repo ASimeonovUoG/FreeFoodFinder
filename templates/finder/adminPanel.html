@@ -11,7 +11,6 @@ Admin Panel
     <div class="title"><h1>Business Information</h1></div>
 
 
-    <div>
       <form method="post" action="{% url 'finder:adminPanel' business.slug %}"
             enctype="multipart/form-data">
         <div class="form-group">
@@ -30,9 +29,21 @@ Admin Panel
             </p>
             {% endfor %}
         <button type="submit" class="btn btn-primary" name="submit_form">Save</button>
+
+            <form class="form-inline"
+                method="post"
+                action="{% url 'finder:adminPanel' business.slug %}">
+
+                {% csrf_token %}
+
+                <button class="btn btn-primary"
+                    type="submit"
+                    id="delete"
+                    name="delete"
+                    value="{{ business.id }}">Delete this business</button>
+        </form>
         </div>
       </form>
-    </div>
 
 {% if current_offer %}
     <p>You have an offer running for this business. Click below to remove the reservation for all users and delete the offer.</p>
