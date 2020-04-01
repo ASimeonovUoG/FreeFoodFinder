@@ -11,7 +11,6 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 from finder.decorators import isOwner
 from django.contrib.auth.forms import UserChangeForm, SetPasswordForm
 from django.contrib.auth import update_session_auth_hash
-
 # Create your views here.
 
 
@@ -379,3 +378,14 @@ def settings(request):
         'is_owner': is_owner
     }
     return render(request, 'finder/settings.html', context_dict)
+
+
+@login_required
+def currentReservation(request):
+    # Gives the template a reseravtion if the user has one.
+    reservation = False
+    cUser = UserAccount.objects.filter(user=request.user)[0]
+    if cUser.reservation:
+        reservation = cUser.reservation
+    return render(request, 'finder/currentReservation.html',
+                  {"reservation": reservation})

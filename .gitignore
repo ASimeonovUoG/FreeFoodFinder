@@ -9,3 +9,4 @@ thumbs.db
 finder/migrations/0001_initial.py
 *cpython-37.pyc
 *.cpython-37.pyc
+requirements.txt

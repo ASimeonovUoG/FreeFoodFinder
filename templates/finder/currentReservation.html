@@ -1,0 +1,25 @@
+{% extends 'finder/sidebar_base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+Settings
+{% endblock %}
+
+{% block body_block %}
+<div class="title">
+    <h1>Current Reservation</h1>
+</div>
+<div>
+    {% if reservation %}
+    <div class="alert alert-success" role="alert">
+        You have booked an offer! Please pick up your meal at <strong>{{ reservation.business.businessName }},
+        {{ reservation.business.address }} before {{reservation.business.offersUntil }}</strong>.
+    </div>
+    {% else %}
+    <div class="alert alert-danger">
+        No booked offer. <a href="{% url 'finder:user_login' %}"
+            class="alert-link">Reserve now !</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
