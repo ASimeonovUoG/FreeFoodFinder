@@ -6,15 +6,22 @@ Settings
 {% endblock %}
 
 {% block body_block %}
-<div><h1>My Account</h1></div>
 <div>
-    <p>To change username and password details visit the settings page <a href="{% url 'finder:settings' %}"> here</a>
-    </p>
-    {% if is_owner %}
-    <p>To update your business details visit myBusinesses and select the business you want to make changes to <a
-            href="{% url 'finder:myBusinesses' %}"> here</a></p>
-    <p>For all of your business needs you can find our contact information by selecting support<a
-            href="{% url 'finder:support' %}"> here</a></p>
-    {% endif %}
+        <h1>My Account</h1>
+</div>
+<div>
+        <p>To change username and password details visit the account settings page <a href="{% url 'finder:settings' %}">
+                        here.</a>
+        </p>
+        {% if is_owner %}
+        <p>To update your business details visit myBusinesses and select the business you want to make changes to <a
+                        href="{% url 'finder:myBusinesses' %}"> here.</a></p>
+        <p>For all of your business needs you can find our contact information by selecting support<a
+                        href="{% url 'finder:support' %}"> here.</a></p>
+        {% else %}
+        <p>To manage you current booking <a href="{% url 'finder:currentReservation' %}">
+                        click here.</a>
+
+                {% endif %}
 </div>
 {% endblock %}
