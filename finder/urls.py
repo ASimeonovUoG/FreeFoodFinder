@@ -20,5 +20,6 @@ urlpatterns = [
     path("reserve/", views.reserve, name="reserve"),
     path("addBusiness/", views.add_business, name="addBusiness"),
     path("curentReservation/", views.currentReservation, name="curentReservation"),
-    path("cancelOffer/", views.cancelOffer, name="cancelOffer")
+    path("cancelOffer/", views.cancelOffer, name="cancelOffer"),
+    path("terms-and-conditions", views.tac, name="termsAndConditions")
 ]

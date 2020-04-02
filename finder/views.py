@@ -23,6 +23,9 @@ def contact(request):
     # Simply render a page
     return render(request, 'finder/contact.html')
 
+def tac(request):
+    # Simply render a page
+    return render(request, 'finder/termsAndConditions.html')
 
 def reserve(request):
     if request.method == 'POST':
@@ -206,7 +209,6 @@ def signUp(request):
         'account_form': account_form,
         'registered': registered
     }
-    print(context_dict)
     return render(request, 'finder/signUp.html', context_dict)
 
 
