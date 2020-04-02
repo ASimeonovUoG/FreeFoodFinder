@@ -148,6 +148,7 @@ def show_business(request, business_name_slug):
     context_dict = {}
     try:
         business = Business.objects.get(slug=business_name_slug)
+        business.tags = [ tag.capitalize() for tag in  business.tags.replace(" ", "").split(',')]
         context_dict['business'] = business
         context_dict['key'] = read_google_key()
 
