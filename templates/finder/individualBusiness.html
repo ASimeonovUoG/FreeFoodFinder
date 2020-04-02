@@ -29,8 +29,9 @@ Unknown Business
 <div class="business-descr">
     <br/>
     <p class='lead'>{{ business.description }}</p>
-    <p class='lead'> {% for key in business.tags %}
-        &#8226 {{ key.capitalize }}
+    <p class='lead'> 
+        {% for key in business.tags %}
+        &#8226 {{ key }}
         {% endfor %}
     </p>
     <p class='lead'>

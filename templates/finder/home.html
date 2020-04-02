@@ -58,7 +58,9 @@
         <div class="offer-info">
             <h3><a href="{% url 'finder:show_business' offer.business.slug %}">{{ offer.business.businessName }}</a>
             </h3>
-            Keywords: {{ offer.business.tags }}</br>
+            {% for key in offer.business.tags %}
+            &#8226 {{ key }}
+            {% endfor %}</br>
             {{ offer.business.address }}</br>
             {{ offer.portionAmount }} portions available now!
             Offers until: {{ offer.business.offersUntil }}

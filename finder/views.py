@@ -101,6 +101,7 @@ def generate_featured_offers():
     offers = Offer.objects.all()
     for o in offers:
         if o.portionAmount > FEATURED_THRESHOLD:
+            o.business.tags = [ tag.capitalize() for tag in  o.business.tags.replace(" ", "").split(',')]
             featured_offers.append(o)
     return featured_offers
 
@@ -121,6 +122,7 @@ def render_list_of_offers(request, query, distance_threshold=10):
                 # appends the offer because offers are associated with businesses. And a business should only appear
                 # in the search results if it has an offer
                 if len(offer) > 0:
+                    offer[0].business.tags = [ tag.capitalize() for tag in  offer[0].business.tags.replace(" ", "").split(',')]
                     offers.append(offer[0])
         # calculate_distance raises ValueError if it can't parse the data
         except ValueError:
@@ -135,6 +137,7 @@ def render_list_of_offers(request, query, distance_threshold=10):
             all_offers = Offer.objects.all()
             for o in all_offers:
                 if o.portionAmount > FEATURED_THRESHOLD:
+                    o.business.tags = [ tag.capitalize() for tag in  o.business.tags.replace(" ", "").split(',')]
                     offers.append(o)
 
     return render(request, 'finder/find_food.html', {
