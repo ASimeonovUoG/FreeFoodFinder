@@ -25,7 +25,7 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 SECRET_KEY = 'xjf=vnfay1-m+dw-cm$i4l04mipyc*ist_dq0b3=jlsp$jt^=!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['alexanderuog.pythonanywhere.com', 'localhost', '127.0.0.1']
 
