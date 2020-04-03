@@ -1,5 +1,5 @@
-# _ IMPORTANT _ #
-** In order to successfuly run our application, a Google Maps API key is required. The key and instructions on how to save them are available in the Project summary sheet submitted on behalf of Team C. **
+# IMPORTANT #
+**In order to successfuly run our application, a _Google Maps API_ key is required. The key and instructions on how to save them are available in the Project summary sheet submitted on behalf of Team C.**
 # External sources used:
 - Icons :  https://material.io/ 
 - Bootstrap LogIn : https://startbootstrap.com/snippets/login/ 
