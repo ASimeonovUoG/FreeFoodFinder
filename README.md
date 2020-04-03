@@ -1,5 +1,6 @@
 # IMPORTANT #
 **In order to successfuly run our application, a _Google Maps API_ key is required. The key and instructions on how to save them are available in the Project summary sheet submitted on behalf of Team C.**
+**Moreover, when running the server locally - set Debug = True in the settings.py file for static content to appear normally.**
 # External sources used:
 - Icons :  https://material.io/ 
 - Bootstrap LogIn : https://startbootstrap.com/snippets/login/ 
