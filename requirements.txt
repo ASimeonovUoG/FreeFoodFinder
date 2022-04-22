@@ -1,6 +1,6 @@
 certifi==2019.11.28
 chardet==3.0.4
-Django==2.2.3
+Django==2.2.28
 django-username-email==2.2.4
 googlemaps==4.2.0
 idna==2.9
