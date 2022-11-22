@@ -4,7 +4,7 @@ Django==2.2.3
 django-username-email==2.2.4
 googlemaps==4.2.0
 idna==2.9
-Pillow==7.0.0
+Pillow==9.3.0
 pytz==2019.3
 requests==2.23.0
 sqlparse==0.3.1
